@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "utilidades.h"
+#include "cinta_entrada.h"
 
 int main (int argc, char* argv[]) {
   // Comprobar el numero de parametros de entrada
@@ -15,7 +16,9 @@ int main (int argc, char* argv[]) {
       MostrarAyuda();
       return 0;
     }
-    
+    // Leer cinta de entrada
+    CintaEntrada entrada(opciones.cinta_entrada);
+    entrada.MostrarCinta();
 
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;

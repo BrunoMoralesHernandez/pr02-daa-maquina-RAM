@@ -15,6 +15,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 set(SOURCES
     src/main.cc
     src/utilidades.cc
+    src/cinta_entrada.cc
 )
 
 # Crear ejecutable
