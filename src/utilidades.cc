@@ -50,7 +50,12 @@ OpcinesPrograma ParseArgs(const int argc, char* argv[]) {
       } else {
         throw std::runtime_error("Error: No se indico el nombre del fichero");
       }
+    } else {
+      std::cerr << "Error: argumento invalido" << std::endl;
     }
+  }
+  if (opciones.cinta_entrada == opciones.cinta_salida) {
+    throw std::runtime_error("Error fatal: El archivo de entrada y salida no pueden ser el mismo.");
   }
   return opciones;
 }

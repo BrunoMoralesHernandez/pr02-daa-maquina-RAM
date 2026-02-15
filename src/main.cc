@@ -2,6 +2,7 @@
 
 #include "utilidades.h"
 #include "cinta_entrada.h"
+#include "cinta_salida.h"
 
 int main (int argc, char* argv[]) {
   // Comprobar el numero de parametros de entrada
@@ -20,6 +21,12 @@ int main (int argc, char* argv[]) {
     CintaEntrada entrada(opciones.cinta_entrada);
     entrada.MostrarCinta();
 
+    CintaSalida salida(opciones.cinta_salida);
+    for (int i = 0; i < 10; ++i) {
+      salida.Write(i);
+    }
+
+    salida.Cerrar();
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
     return 2;
