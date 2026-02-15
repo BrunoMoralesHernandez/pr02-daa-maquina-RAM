@@ -17,6 +17,7 @@ set(SOURCES
     src/utilidades.cc
     src/cinta_entrada.cc
     src/cinta_salida.cc
+    src/memoria_datos.cc
 )
 
 # Crear ejecutable

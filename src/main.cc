@@ -3,6 +3,7 @@
 #include "utilidades.h"
 #include "cinta_entrada.h"
 #include "cinta_salida.h"
+#include "memoria_datos.h"
 
 int main (int argc, char* argv[]) {
   // Comprobar el numero de parametros de entrada
@@ -19,12 +20,25 @@ int main (int argc, char* argv[]) {
     }
     // Leer cinta de entrada
     CintaEntrada entrada(opciones.cinta_entrada);
+    // Comprobar que lee bien
     entrada.MostrarCinta();
 
     CintaSalida salida(opciones.cinta_salida);
+    // Comprobar que escribe bien
     for (int i = 0; i < 10; ++i) {
       salida.Write(i);
     }
+
+    // Crear memoria de datos
+    MemoriaDatos datos;
+    // bloque para comprobar que guarda bien
+    size_t contador = 0;
+    while (!entrada.FinDeCinta()) {
+      int actual = entrada.Read();
+      datos.Store(actual, contador);
+      ++contador;
+    }
+    datos.MostrarMemoria();
 
     salida.Cerrar();
   } catch (const std::exception& e) {
