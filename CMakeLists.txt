@@ -13,11 +13,16 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # Archivos fuente
 set(SOURCES
-    src/main.cc
-    src/utilidades.cc
-    src/cinta_entrada.cc
-    src/cinta_salida.cc
-    src/memoria_datos.cc
+  src/main.cc
+  src/utilidades.cc
+  src/cinta_entrada.cc
+  src/cinta_salida.cc
+  src/memoria_datos.cc
+  src/operandodirecto.cc
+  src/operandoindirecto.cc
+  src/operandoindexado.cc
+  src/operandoinmediato.cc
+  src/operador.cc
 )
 
 # Crear ejecutable

@@ -1,11 +1,12 @@
 #ifndef PRACTICARAM_INCLUDE_OPERADOR_H
 #define PRACTICARAM_INCLUDE_OPERADOR_H
 
-#include "operador.h"
+#include "memoria_datos.h"
 
 class Operador {
-  virtual int GetValor () = 0;
-  virtual void SetValor () = 0;
+ public:
+  virtual ~Operador();
+  virtual int GetValor (const MemoriaDatos& datos) = 0;
 };
 
 # endif
