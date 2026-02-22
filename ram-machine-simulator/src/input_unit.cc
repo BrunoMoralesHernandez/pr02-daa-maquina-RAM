@@ -33,7 +33,7 @@ InputUnit::InputUnit(const std::string& nombre_archivo) {
     cinta_entrada_.Agregar(valor);
   }
   archivo_entrada.close();
-  if (cinta_entrada_.Tamaño() == 0) {
+  if (cinta_entrada_.Tamano() == 0) {
     throw std::runtime_error("Error: El archivo está vacío");
   }
 }
@@ -43,7 +43,7 @@ InputUnit::InputUnit(const std::string& nombre_archivo) {
  * @return Valor
  */
 int InputUnit::LeerValor() {
-  if (cabezal_ >= cinta_entrada_.Tamaño()) {
+  if (cabezal_ >= cinta_entrada_.Tamano()) {
     throw std::runtime_error("Error: Fin de cinta");
   }
   // Leo el actual y avanzo el cabezal
