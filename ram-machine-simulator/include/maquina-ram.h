@@ -17,32 +17,36 @@
 #ifndef PRACTICARAM_INCLUDE_MAQUINA_RAM_H
 #define PRACTICARAM_INCLUDE_MAQUINA_RAM_H
 
+#include <iostream>
 #include <string>
+#include "input_unit.h"
+#include "output_unit.h"
+#include "memoria_datos.h"
+#include "memoria_programa.h"
 
 class MaquinaRAM {
-//  public:
-//   // Constructor
-//   MaquinaRAM (const std::string& fichero_programa, const std::string& fichero_entrada, 
-//               const std::string& fichero_salida);
-//   void run ();
-//   // Getter
-//   MemoriaDatos& getMemoriaDatos();
-//   MemoriaPrograma& getMemoriaPrograma();
-//   CintaEntrada& getCintaEntrada();
-//   CintaSalida& getCintaSalida();
-//   int getPC() const;
-//   // Setter
-//   void setPC(int nuevaLinea);
-//   // Metodos auxiliares
-//   void incrementarPC();
-//   void halt();
-//  private:
-//   int pc_;
-//   bool halt_flag_;
-//   MemoriaDatos datos_;
-//   MemoriaInstrucciones instrucciones_;
-//   CintaEntrada cinta_entrada_;
-//   CintaSalida cinta_entrada_;  
+ public:
+  MaquinaRAM (const std::string&, const std::string&, const std::string&);
+  void Run ();
+  // Getters
+  MemoriaDatos& datos() { return datos_; }
+  MemoriaPrograma& instrucciones() { return instrucciones_; }
+  InputUnit& getCintaEntrada() { return entrada_; }
+  OutputUnit& getCintaSalida() { return salida_; }
+  int pc() const { return pc_; }
+  // Setters
+  void setPC(const int);
+  // Metodos auxiliares
+  void IncrementarPC() { ++pc_; };
+  void halt() { halt_flag_ = true; };
+  void MostrarEstado() const;
+ private:
+  int pc_{};
+  bool halt_flag_{false};
+  MemoriaDatos datos_{};
+  MemoriaPrograma instrucciones_{};
+  InputUnit entrada_{};
+  OutputUnit salida_{};  
 };
 
 # endif
