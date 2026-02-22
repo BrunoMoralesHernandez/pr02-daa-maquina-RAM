@@ -1,0 +1,347 @@
+TODO EL TEXTO ESTA GENERADO CON IA SI NO ENTIENDES ALGO ESCRIBEME 
+
+CAMBIOS DE DISEÑO - EXPLICACIÓN DETALLADA
+
+## 1. CINTA GENÉRICA + INPUT/OUTPUT UNITS
+
+### Cambio: De dos clases específicas a una genérica + dos unidades
+
+**ANTES (Diseño inicial):**
+```
+CintaEntrada → Lectura + Gestión de archivo
+CintaSalida → Escritura + Gestión de archivo
+```
+Cada cinta hacía: almacenamiento + I/O + gestión de cabezal
+
+**AHORA (Diseño refactorizado):**
+```
+Cinta → Solo almacenamiento (genérica)
+InputUnit → Lectura desde archivo + cabezal de entrada
+OutputUnit → Escritura a archivo + cabezal de salida
+```
+
+### Por qué este cambio:
+
+**Principio Single Responsibility:**
+- Cinta = responsabilidad: almacenar datos
+- InputUnit = responsabilidad: gestionar entrada
+- OutputUnit = responsabilidad: gestionar salida
+
+**Problema anterior:**
+```cpp
+// CintaEntrada duplicaba lógica en constructor
+CintaEntrada::CintaEntrada(const std::string& archivo) {
+  // Abrir archivo
+  // Leer datos
+  // Cerrar archivo
+}
+
+// CintaSalida lo mismo
+CintaSalida::CintaSalida(const std::string& archivo) {
+  // Abrir archivo
+}
+// Y luego Write()
+```
+
+**Solución:**
+```cpp
+// Cinta: solo un contenedor
+class Cinta {
+  std::vector<int> datos_;
+  void Agregar(int valor);
+  int Leer(size_t indice);
+};
+
+// InputUnit: gestiona la lectura
+class InputUnit {
+  Cinta cinta_;
+  size_t cabezal_;
+  
+  InputUnit(const std::string& archivo) {
+    // Carga archivo en Cinta
+  }
+  int LeerValor() { // Avanza cabezal y retorna
+    return cinta_.Leer(cabezal_++);
+  }
+};
+
+// OutputUnit: gestiona la escritura
+class OutputUnit {
+  Cinta cinta_;
+  std::string archivo_;
+  
+  OutputUnit(const std::string& archivo) {
+    // Solo almacena nombre
+  }
+  void EscribirValor(int valor) {
+    cinta_.Agregar(valor);
+  }
+  void CerrarCinta() {
+    // Aquí escribe en archivo
+  }
+};
+```
+
+**Beneficio:**
+- Cinta es reutilizable en otros contextos
+- InputUnit y OutputUnit tienen responsabilidades claras
+- Mejor testing: puedes testear Cinta sin I/O
+- Menor duplicación de código
+
+---
+
+## 2. MEMORIA INSTRUCCIONES: PUNTEROS INTELIGENTES
+
+### Cambio: De punteros desnudos a unique_ptr
+
+**ANTES:**
+```cpp
+class MemoriaInstrucciones {
+ private:
+  std::vector<Instruccion*> instrucciones_;
+  
+ public:
+  ~MemoriaInstrucciones() {
+    for (size_t i = 0; i < instrucciones_.size(); ++i) {
+      delete instrucciones_[i];
+    }
+    instrucciones_.clear();
+  }
+};
+```
+
+**AHORA:**
+```cpp
+class MemoriaInstrucciones {
+ private:
+  std::vector<std::unique_ptr<Instruccion>> instrucciones_;
+  
+ public:
+  ~MemoriaInstrucciones() = default;  // Automático
+};
+```
+
+### Por qué este cambio:
+
+**Problema anterior:**
+1. Memory leak si hay excepciones en constructor
+2. Código repetitivo
+3. Propenso a errores humanos
+4. Si alguien copia la clase: shallow copy (dos delete del mismo puntero)
+
+**unique_ptr resuelve:**
+1. RAII automático: se destruye al salir de scope
+2. Exception-safe: aunque lance excepción, limpia
+3. Move semantics: no hay copias accidentales
+4. Una sola línea: `~MemoriaInstrucciones() = default;`
+
+**Ejemplo de seguridad:**
+```cpp
+// ANTES - Memory leak
+{
+  MemoriaInstrucciones mem;
+  mem.AgregarInstruccion(new InstruccionADD(...));
+  throw std::runtime_error("Error");  // ← Nunca llama al destructor si es stack
+}  // Memory leak de InstruccionADD
+
+// AHORA - Exception-safe
+{
+  MemoriaInstrucciones mem;
+  mem.AgregarInstruccion(std::make_unique<InstruccionADD>(...));
+  throw std::runtime_error("Error");  // ← unique_ptr se destruye automáticamente
+}  // ✓ Sin memory leak
+```
+
+**Cambios mínimos necesarios:**
+1. `#include <memory>`
+2. `std::vector<std::unique_ptr<Instruccion>>` en lugar de `Instruccion*`
+3. Usar `.get()` cuando retornes punteros raw
+4. Destructor = default
+
+---
+
+## 3. INSTRUCCIONES: ELIMINAR DEPENDENCIA DE MAQUINA_RAM
+
+### Cambio: Firma de execute()
+
+**ANTES:**
+```cpp
+class Instruccion {
+  virtual void execute(MaquinaRAM& maquina) = 0;
+};
+```
+
+**AHORA:**
+```cpp
+class Instruccion {
+ public:
+  virtual ~Instruccion() = default;
+  virtual void execute(MemoriaDatos& datos, 
+                      InputUnit& entrada, 
+                      OutputUnit& salida, 
+                      int& pc) = 0;
+};
+```
+
+### Por qué este cambio:
+
+**Problema anterior:**
+```cpp
+// Instruccion.h incluye maquina-ram.h
+#include "maquina-ram.h"
+
+// maquina-ram.h incluye memoria_instrucciones.h
+#include "memoria_instrucciones.h"
+
+// memoria_instrucciones.h incluye instruccion.h
+#include "instruccion.h"
+
+// ❌ DEPENDENCIA CIRCULAR
+```
+
+**Además:**
+- No puedes testear Instruccion sin MaquinaRAM completa
+- Acoplamiento fuerte a implementación concreta
+- Violación de Dependency Inversion (SOLID)
+
+**Solución:**
+```cpp
+// Instruccion NO conoce MaquinaRAM
+// Solo conoce las abstracciones que necesita
+
+void execute(MemoriaDatos& datos,  // Necesito leer/escribir registros
+            InputUnit& entrada,    // Necesito leer entrada
+            OutputUnit& salida,    // Necesito escribir salida
+            int& pc) = 0;         // Necesito cambiar el PC
+```
+
+**Ventajas:**
+- No hay dependencia circular
+- Testeable: puedes pasar mocks
+- Bajo acoplamiento
+- Depende de abstracciones, no de clases concretas
+
+**Ejemplo - InstruccionADD:**
+```cpp
+// ANTES
+void InstruccionADD::execute(MaquinaRAM& maquina) {
+  int valor = operando_->GetValor(maquina.getMemoriaDatos());
+  int r0 = maquina.getMemoriaDatos().Load(0);
+  maquina.getMemoriaDatos().Store(r0 + valor, 0);
+  maquina.incrementarPC();
+}
+
+// AHORA - Más directo
+void InstruccionADD::execute(MemoriaDatos& datos, 
+                            InputUnit& entrada, 
+                            OutputUnit& salida, 
+                            int& pc) {
+  int valor = operando_->GetValor(datos);
+  int r0 = datos.Load(0);
+  datos.Store(r0 + valor, 0);
+  pc++;
+}
+```
+
+---
+
+## 4. OPERANDOS: HERENCIA PÚBLICA
+
+### Cambio: Una palabra: "public"
+
+**ANTES:**
+```cpp
+class OperandoDirecto : Operador {  // ❌ Herencia privada (por defecto)
+ public:
+  // métodos...
+};
+```
+
+**AHORA:**
+```cpp
+class OperandoDirecto : public Operador {  // ✓ Herencia pública
+ public:
+  // métodos...
+};
+```
+
+### Por qué este cambio:
+
+**Problema:**
+```cpp
+// Con herencia privada:
+Operador* op = new OperandoDirecto(5);  // ❌ Error de compilación
+// El compilador ve OperandoDirecto como privadamente derivado de Operador
+// Por tanto Operador* no puede apuntar a OperandoDirecto
+```
+
+**Solución:**
+```cpp
+// Con herencia pública:
+Operador* op = new OperandoDirecto(5);  // ✓ Funciona
+op->GetValor(datos);  // ✓ Polimorfismo
+```
+
+**Por qué pasó:**
+- En C++, por defecto la herencia en clases es privada
+- En structs es pública
+- Hay que especificar explícitamente `public` si lo deseas en clases
+
+**Cambios necesarios (4 líneas):**
+```cpp
+// operandoinmediato.h
+class OperandoInmediato : public Operador {
+
+// operandodirecto.h
+class OperandoDirecto : public Operador {
+
+// operandoindirecto.h
+class OperandoIndirecto : public Operador {
+
+// operandoindexado.h
+class OperandoIndexado : public Operador {
+```
+
+**Impacto:**
+- Solo visibilidad, sin cambio de lógica
+- Permite polimorfismo correcto
+- Esencial para que el parser pueda crear `Operador*`
+
+---
+
+## RESUMEN DE CAMBIOS
+
+| Cambio | Antes | Ahora | Razón |
+|--------|-------|-------|-------|
+| Cintas | CintaEntrada, CintaSalida | Cinta + InputUnit + OutputUnit | Single Responsibility |
+| Memoria | punteros desnudos | unique_ptr | RAII automático |
+| Instrucciones | execute(MaquinaRAM&) | execute(MemoriaDatos&, InputUnit&, OutputUnit&, int&) | Inyección de dependencias |
+| Operandos | : Operador | : public Operador | Polimorfismo correcto |
+
+---
+
+## IMPACTO EN PRÓXIMOS PASOS
+
+### Parser
+```cpp
+// Cuando parsees "LOAD 5"
+programa.AgregarInstruccion(
+  std::make_unique<InstruccionLOAD>(
+    std::make_unique<OperandoDirecto>(5)
+  )
+);
+```
+
+### MaquinaRAM.run()
+```cpp
+for (int pc = 0; pc < programa.Tamano(); ++pc) {
+  Instruccion* inst = programa.ObtenerInstruccion(pc);
+  inst->execute(datos_, entrada_, salida_, pc);
+  // pc puede ser modificado por JUMP
+}
+salida_.CerrarCinta();
+```
+
+---
+
+Fin del documento
