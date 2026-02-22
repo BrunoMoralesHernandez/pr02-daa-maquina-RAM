@@ -55,7 +55,7 @@ void MaquinaRAM::Run() {
       }
       // Ejecutar instrucción
       // La instrucción recibe referencias y puede modificar estado
-      instruccion->execute(datos_, entrada_, salida_, pc_);
+      instruccion->execute(datos_, entrada_, salida_, pc_, halt_flag_);
       instrucciones_ejecutadas++;
     } catch (const std::runtime_error& e) {
       std::cerr << "Error en ejecución (PC=" << pc_ << "): " << e.what() << std::endl;
