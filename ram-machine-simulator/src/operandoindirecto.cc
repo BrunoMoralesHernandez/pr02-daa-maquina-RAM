@@ -16,9 +16,18 @@
 
 #include "operandoindirecto.h"
 
-OperandoIndirecto::OperandoIndirecto (const int registro) : registro_id_(registro) {}
-
+/**
+ * @brief 
+ * 
+ * @param datos 
+ * @return int 
+ */
 int OperandoIndirecto::GetValor (const MemoriaDatos& datos) {
   int registro = datos.Load(registro_id_);
   return datos.Load(registro);
+}
+
+void OperandoIndirecto::SetValor(MemoriaDatos& datos, int valor) {
+  int registro = datos.Load(registro_id_);
+  datos.Store(valor, registro);
 }

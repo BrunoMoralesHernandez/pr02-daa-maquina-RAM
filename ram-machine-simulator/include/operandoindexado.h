@@ -21,8 +21,9 @@
 
 class OperandoIndexado : public Operador {
  public:
-  OperandoIndexado (int registro, int offset);
-  int GetValor (const MemoriaDatos& datos) override;
+  OperandoIndexado(int registro, int offset) : registro_id_(registro), offset_(offset) {}
+  int GetValor(const MemoriaDatos& datos) override;
+  void SetValor(MemoriaDatos& datos, int valor) override;
  private:
   int registro_id_;
   int offset_;

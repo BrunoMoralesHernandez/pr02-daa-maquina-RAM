@@ -16,8 +16,20 @@
 
 #include "operandoindexado.h"
 
-OperandoIndexado::OperandoIndexado (int registro, int offset) : registro_id_(registro), offset_(offset) {}
-
+/**
+ * @brief 
+ * 
+ * @param datos 
+ * @return int 
+ */
 int OperandoIndexado::GetValor (const MemoriaDatos& datos) {
   return datos.Load(registro_id_, offset_);
+}
+
+/**
+ * @brief 
+ * 
+ */
+void OperandoIndexado::SetValor(MemoriaDatos& datos, int valor) {
+  datos.Store(valor, registro_id_, offset_);
 }

@@ -21,8 +21,9 @@
 
 class OperandoInmediato : public Operador {
  public:
-  OperandoInmediato (int valor);
-  int GetValor (const MemoriaDatos& datos) override;
+  OperandoInmediato(int valor) : valor_(valor) {}
+  int GetValor(const MemoriaDatos& datos) override;
+  void SetValor(MemoriaDatos& datos, int valor) override;
  private:
   int valor_;
 };

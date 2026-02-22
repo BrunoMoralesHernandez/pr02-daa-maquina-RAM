@@ -23,6 +23,7 @@ class Operador {
  public:
   virtual ~Operador() = default;
   virtual int GetValor(const MemoriaDatos& datos) = 0;
+  virtual void SetValor(MemoriaDatos& datos, int valor) = 0;
 };
 
 # endif
