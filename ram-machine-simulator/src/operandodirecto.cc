@@ -23,6 +23,9 @@
  * @return int 
  */
 int OperandoDirecto::GetValor (const MemoriaDatos& datos) {
+  if (indice_registro_ < 0) {
+    throw std::runtime_error("Error: Indice de registro directo invalido, valor negativo");
+  }
   return datos.Load(indice_registro_);
 }
 
@@ -33,5 +36,8 @@ int OperandoDirecto::GetValor (const MemoriaDatos& datos) {
  * @param valor 
  */
 void OperandoDirecto::SetValor(MemoriaDatos& datos, int valor) {
+  if (indice_registro_ < 0) {
+    throw std::runtime_error("Error: Indice de registro directo invalido, valor negativo");
+  }
   datos.Store(valor, indice_registro_);
 }

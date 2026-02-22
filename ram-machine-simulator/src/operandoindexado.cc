@@ -23,6 +23,9 @@
  * @return int 
  */
 int OperandoIndexado::GetValor (const MemoriaDatos& datos) {
+  if (registro_id_ < 0 || offset_ < 0) {
+    throw std::runtime_error("Error: Indice de registro indexado invalido, valor negativo");
+  }
   return datos.Load(registro_id_, offset_);
 }
 
@@ -31,5 +34,8 @@ int OperandoIndexado::GetValor (const MemoriaDatos& datos) {
  * 
  */
 void OperandoIndexado::SetValor(MemoriaDatos& datos, int valor) {
+  if (registro_id_ < 0 || offset_ < 0) {
+    throw std::runtime_error("Error: Indice de registro indexado invalido, valor negativo");
+  }
   datos.Store(valor, registro_id_, offset_);
 }
