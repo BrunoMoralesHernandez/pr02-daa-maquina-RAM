@@ -29,7 +29,7 @@ MaquinaRAM::MaquinaRAM(const std::string& fichero_programa, const std::string& f
   const std::string& fichero_salida) : pc_{0}, halt_flag_{false}, entrada_{fichero_entrada}, salida_ {fichero_salida} {
     // Faltaria el parser que cargara el programa en memoria
     // Ahora tendriamos las cintas cargadas, y la memoria de datos a 0 inicializada el ACC
-  }
+}
 
 /**
  * @brief run() - Ejecuta el programa

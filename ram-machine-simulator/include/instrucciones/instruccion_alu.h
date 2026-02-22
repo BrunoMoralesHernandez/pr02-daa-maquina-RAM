@@ -14,15 +14,25 @@
   * @version 1.0
   */
 
-#ifndef PRACTICARAM_INCLUDE_OPERADOR_H
-#define PRACTICARAM_INCLUDE_OPERADOR_H
+#ifndef PRACTICARAM_INCLUDE_INSTRUCCION_ALU_H
+#define PRACTICARAM_INCLUDE_INSTRUCCION_ALU_H
 
-#include "memoria_datos.h"
+#include "instruccion.h"
 
-class Operador {
- public:
-  virtual ~Operador() = default;
-  virtual int GetValor(const MemoriaDatos& datos) = 0;
+class InstruccionADD : public Instruccion {
+
 };
 
-# endif
+class InstruccionSUB : public Instruccion {
+
+};
+
+class InstruccionMUL : public Instruccion {
+
+};
+
+class InstruccionDIV : public Instruccion {
+
+};
+
+#endif

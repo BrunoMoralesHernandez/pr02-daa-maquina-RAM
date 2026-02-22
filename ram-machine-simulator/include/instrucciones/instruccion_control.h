@@ -14,15 +14,21 @@
   * @version 1.0
   */
 
-#ifndef PRACTICARAM_INCLUDE_OPERADOR_H
-#define PRACTICARAM_INCLUDE_OPERADOR_H
+#ifndef PRACTICARAM_INCLUDE_INSTRUCCION_CONTROL_H
+#define PRACTICARAM_INCLUDE_INSTRUCCION_CONTROL_H
 
-#include "memoria_datos.h"
+#include "instruccion.h"
 
-class Operador {
- public:
-  virtual ~Operador() = default;
-  virtual int GetValor(const MemoriaDatos& datos) = 0;
+class InstruccionJUMP : public Instruccion {
+
 };
 
-# endif
+class InstruccionJZERO : public Instruccion {
+
+};
+
+class InstruccionJGTZ : public Instruccion {
+
+};
+
+#endif

@@ -33,7 +33,7 @@
 class Instruccion {
  public:
   virtual ~Instruccion() = default;
-  virtual void execute (MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc) = 0;
+  virtual void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc) = 0;
 };
 
 # endif
