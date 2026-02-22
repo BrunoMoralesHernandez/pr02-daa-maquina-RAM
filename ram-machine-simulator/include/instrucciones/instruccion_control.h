@@ -17,18 +17,29 @@
 #ifndef PRACTICARAM_INCLUDE_INSTRUCCION_CONTROL_H
 #define PRACTICARAM_INCLUDE_INSTRUCCION_CONTROL_H
 
+#include <memory>
+#include "operador.h"
 #include "instruccion.h"
 
 class InstruccionJUMP : public Instruccion {
-
+  InstruccionJUMP(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 class InstruccionJZERO : public Instruccion {
-
+  InstruccionJZERO(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 class InstruccionJGTZ : public Instruccion {
-
+  InstruccionJGTZ(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 #endif

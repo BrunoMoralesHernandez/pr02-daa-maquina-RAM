@@ -17,10 +17,12 @@
 #ifndef PRACTICARAM_INCLUDE_INSTRUCCION_SISTEMA_H
 #define PRACTICARAM_INCLUDE_INSTRUCCION_SISTEMA_H
 
+#include <memory>
+#include "operador.h"
 #include "instruccion.h"
 
 class InstruccionHALT : public Instruccion {
-
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
 };
 
 #endif

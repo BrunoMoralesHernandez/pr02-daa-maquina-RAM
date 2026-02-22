@@ -17,14 +17,24 @@
 #ifndef PRACTICARAM_INCLUDE_INSTRUCCION_IO_H
 #define PRACTICARAM_INCLUDE_INSTRUCCION_IO_H
 
+#include <memory>
+#include "operador.h"
 #include "instruccion.h"
 
 class InstruccionREAD : public Instruccion {
-
+ public:
+  InstruccionREAD(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 class InstruccionWRITE : public Instruccion {
-
+ public:
+  InstruccionWRITE(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 #endif

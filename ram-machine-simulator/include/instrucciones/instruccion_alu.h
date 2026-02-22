@@ -17,22 +17,40 @@
 #ifndef PRACTICARAM_INCLUDE_INSTRUCCION_ALU_H
 #define PRACTICARAM_INCLUDE_INSTRUCCION_ALU_H
 
+#include <memory>
+#include "operador.h"
 #include "instruccion.h"
 
 class InstruccionADD : public Instruccion {
-
+ public:
+  InstruccionADD(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 class InstruccionSUB : public Instruccion {
-
+ public:
+  InstruccionSUB(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 class InstruccionMUL : public Instruccion {
-
+ public:
+  InstruccionMUL(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 class InstruccionDIV : public Instruccion {
-
+ public:
+  InstruccionDIV(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
 };
 
 #endif

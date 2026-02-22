@@ -34,8 +34,6 @@ class MaquinaRAM {
   InputUnit& getCintaEntrada() { return entrada_; }
   OutputUnit& getCintaSalida() { return salida_; }
   int pc() const { return pc_; }
-  // Setters
-  void setPC(const int);
   // Metodos auxiliares
   void IncrementarPC() { ++pc_; };
   void halt() { halt_flag_ = true; };
