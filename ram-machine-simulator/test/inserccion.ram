@@ -1,140 +1,90 @@
-# Insertion Sort - Ordenamiento por inserción
-# Construye el arreglo ordenado insertando cada elemento en su posición correcta
-# dentro de la porción ya ordenada.
-# Complejidad: O(n²) peor caso, O(n) mejor caso
-# Espacio: O(1)
-
-# Pseudocódigo:
-#   for j = 2 to n do
-#     key = A[j]
-#     i = j - 1
-#     while i > 0 and A[i] > key
-#       A[i + 1] = A[i]
-#       i = i - 1
-#     end
-#     A[i + 1] = key
-#   end
-#
-# Entrada: n (tamaño), seguido de n elementos
-# Salida: Array ordenado
+# ─────────────────────────────────────────────────────────────
+# Insertion Sort - Máquina RAM
 # Registros:
-#   R1 = n (tamaño del array)
-#   R2 = j (índice externo del for)
-#   R3 = i (índice interno del while)
-#   R4 = key
-#   R5 = A (puntero al array, usa direccionamiento indexado)
-#   R6 = A[i] (elemento en posición i)
-#   R7 = A[i+1] (elemento en posición i+1)
+#   R1  = array A (indexado desde 1)
+#   R2  = n
+#   R3  = j (bucle exterior) / contador lectura-escritura
+#   R4  = i (bucle interior)
+#   R5  = key
+#   R6  = auxiliar i+1
+#   R7  = n+1 (límite bucles)
+# Entrada: n A[1] A[2] ... A[n]
+# ─────────────────────────────────────────────────────────────
 
-# Lee el tamaño del array
-READ 1
+READ 2
+LOAD 2
+ADD =1
+STORE 7
 
-# Cargar n en R1
-LOAD 1
-STORE 1
+LOAD =1
+STORE 3
 
-# Lee los n elementos en el array R5[0..n-1]
-LOAD =0
-STORE 3          # contador i = 0
+LEER_ARRAY:	LOAD 7
+		SUB 3
+		JGTZ HACER_LECTURA
+		JUMP FIN_LECTURA
 
-lee_array:       # Loop para leer array
-  LOAD 3
-  LOAD 1
-  SUB 1
-  JGTZ fin_lee_array
-  
-  READ 6         # Lee elemento en R6
-  LOAD 6
-  STORE 5[3]     # A[i] = R6
-  LOAD 3
-  ADD =1
-  STORE 3        # i++
-  JUMP lee_array
+HACER_LECTURA:	READ 1[*3]
+		LOAD 3
+		ADD =1
+		STORE 3
+		JUMP LEER_ARRAY
 
-fin_lee_array:
+FIN_LECTURA:	LOAD =2
+		STORE 3
 
-# Insertion Sort
-# j = 2
-LOAD =2
-STORE 2
+FOR_J:		LOAD 7
+		SUB 3
+		JGTZ CUERPO_FOR_J
+		JUMP FIN_SORT
 
-for_j:           # for j = 2 to n
-  LOAD 2
-  LOAD 1
-  SUB 1
-  JGTZ fin_for_j
-  
-  # key = A[j]
-  LOAD 2
-  STORE 6        # R6 = j (índice)
-  LOAD 5[6]      # R0 = A[j]
-  STORE 4        # key = R0
-  
-  # i = j - 1
-  LOAD 2
-  SUB =1
-  STORE 3        # i = j - 1
-  
-  while_i:       # while i > 0 and A[i] > key
-    LOAD 3
-    JZERO fin_while_i    # si i == 0, salir
-    
-    LOAD 5[3]    # R0 = A[i]
-    LOAD 4       # R0 = R0 - key = A[i] - key
-    SUB 4
-    JZERO fin_while_i   # si A[i] <= key, salir
-    
-    # A[i + 1] = A[i]
-    LOAD 3
-    ADD =1
-    STORE 6      # R6 = i + 1
-    LOAD 5[3]    # R0 = A[i]
-    STORE 5[6]   # A[i + 1] = R0
-    
-    # i = i - 1
-    LOAD 3
-    SUB =1
-    STORE 3      # i--
-    
-    JUMP while_i
-  
-  fin_while_i:
-  
-  # A[i + 1] = key
-  LOAD 3
-  ADD =1
-  STORE 6        # R6 = i + 1
-  LOAD 4         # R0 = key
-  STORE 5[6]     # A[i + 1] = key
-  
-  # j++
-  LOAD 2
-  ADD =1
-  STORE 2
-  
-  JUMP for_j
+CUERPO_FOR_J:	LOAD 1[*3]
+		STORE 5
+		LOAD 3
+		SUB =1
+		STORE 4
 
-fin_for_j:
+WHILE:		LOAD 4
+		JGTZ COND2
+		JUMP FIN_WHILE
 
-# Escribe el array ordenado
-LOAD =0
-STORE 3          # contador i = 0
+COND2:		LOAD 1[*4]
+		SUB 5
+		JGTZ CUERPO_WHILE
+		JUMP FIN_WHILE
 
-escribe_array:
-  LOAD 3
-  LOAD 1
-  SUB 1
-  JGTZ fin_escribe
-  
-  LOAD 5[3]      # R0 = A[i]
-  WRITE 5[3]     # Escribe A[i]
-  
-  LOAD 3
-  ADD =1
-  STORE 3        # i++
-  
-  JUMP escribe_array
+CUERPO_WHILE:	LOAD 4
+		ADD =1
+		STORE 6
+		LOAD 1[*4]
+		STORE 1[*6]
+		LOAD 4
+		SUB =1
+		STORE 4
+		JUMP WHILE
 
-fin_escribe:
+FIN_WHILE:	LOAD 4
+		ADD =1
+		STORE 6
+		LOAD 5
+		STORE 1[*6]
+		LOAD 3
+		ADD =1
+		STORE 3
+		JUMP FOR_J
 
-HALT
+FIN_SORT:	LOAD =1
+		STORE 3
+
+ESCRIBIR:	LOAD 7
+		SUB 3
+		JGTZ HACER_ESCRITURA
+		JUMP FIN
+
+HACER_ESCRITURA: WRITE 1[*3]
+		LOAD 3
+		ADD =1
+		STORE 3
+		JUMP ESCRIBIR
+
+FIN:		HALT
