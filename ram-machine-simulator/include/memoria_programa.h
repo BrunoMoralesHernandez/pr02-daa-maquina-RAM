@@ -33,6 +33,11 @@ class MemoriaPrograma {
  public:
   MemoriaPrograma() = default;
   ~MemoriaPrograma() = default;
+  // AGREGAR ESTO:
+  MemoriaPrograma(const MemoriaPrograma&) = delete;
+  MemoriaPrograma& operator=(const MemoriaPrograma&) = delete;
+  MemoriaPrograma(MemoriaPrograma&&) = default;
+  MemoriaPrograma& operator=(MemoriaPrograma&&) = default;
   void AgregarInstruccion(std::unique_ptr<Instruccion>);
   Instruccion* ObtenerInstruccion(size_t) const;
   size_t Tamano() const { return instrucciones_.size(); }
