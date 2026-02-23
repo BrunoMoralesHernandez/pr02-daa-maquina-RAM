@@ -23,7 +23,7 @@
  * @return int 
  */
 int OperandoIndexado::GetValor(const MemoriaDatos& datos) {
-  size_t indice = indice_dinamico_ ? datos.Load(offset_) : offset_;
+  size_t indice = indice_dinamico_ ? static_cast<size_t>(datos.Load(offset_)) : offset_;
   return datos.Load(registro_id_, indice);
 }
 
@@ -32,6 +32,6 @@ int OperandoIndexado::GetValor(const MemoriaDatos& datos) {
  * 
  */
 void OperandoIndexado::SetValor(MemoriaDatos& datos, int valor) {
-  size_t indice = indice_dinamico_ ? datos.Load(offset_) : offset_;
+  size_t indice = indice_dinamico_ ? static_cast<size_t>(datos.Load(offset_)) : offset_;
   datos.Store(valor, registro_id_, indice);
 }
