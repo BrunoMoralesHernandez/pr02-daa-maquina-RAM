@@ -1,6 +1,15 @@
-# ─────────────────────────────────────────────────────────────
-# BubbleSort - Máquina RAM
-# Registros:
+# BubbleSort
+# for i = 1 to n-1 do
+# 	for j = n downto i + 1 do
+# 		if A[j-1] > A[j] then begin
+# 			temp = A[j-1]
+# 			A[j-1] = A[j]
+# 			A[j] = temp
+# 		end
+# 	end
+# end
+
+# TABLA DE REGISTROS
 #   R1  = array A (indexado desde 1)
 #   R2  = n
 #   R3  = i (bucle exterior)
@@ -9,7 +18,7 @@
 #   R6  = j-1
 #   R7  = n+1 (límite bucles)
 # Entrada: n A[1] A[2] ... A[n]
-# ─────────────────────────────────────────────────────────────
+
 
 READ 2
 LOAD 2
