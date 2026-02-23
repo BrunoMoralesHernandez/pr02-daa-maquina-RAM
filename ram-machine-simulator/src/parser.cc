@@ -39,9 +39,6 @@ MemoriaPrograma Parser::ParsearPrograma(const std::string& fichero) {
   auto lineas_limpias_v1 = LimpiarTodasLineas(lineas, 1);
   // 4. Reemplazar etiquetas por =indice
   auto lineas_reemplazadas = ReemplazarEtiquetas(lineas_limpias_v1);
-  for (size_t i = 0; i < lineas_reemplazadas.size(); ++i) {
-    std::cerr << lineas_reemplazadas[i] << ",\n";
-  }
   MemoriaPrograma programa;
   int numero_linea = 0;
   for (const auto& linea : lineas_reemplazadas) {
@@ -147,18 +144,15 @@ std::string Parser::IdentificarTipoOperando(const std::string& operando_str) {
 
 int Parser::ExtraerRegistro(const std::string& operando_str) {
   std::string temp = operando_str;
-  
   // Eliminar prefijos
   if (!temp.empty() && (temp[0] == '=' || temp[0] == '*')) {
     temp = temp.substr(1);
   }
-  
   // Eliminar indexado
   size_t pos_corchete = temp.find('[');
   if (pos_corchete != std::string::npos) {
     temp = temp.substr(0, pos_corchete);
   }
-  
   try {
     return std::stoi(temp);
   } catch (...) {
@@ -169,13 +163,10 @@ int Parser::ExtraerRegistro(const std::string& operando_str) {
 int Parser::ExtraerIndice(const std::string& operando_str) {
   size_t inicio = operando_str.find('[');
   size_t fin = operando_str.find(']');
-  
   if (inicio == std::string::npos || fin == std::string::npos) {
     throw std::runtime_error("Error: Formato indexado inválido '" + operando_str + "'");
   }
-  
   std::string indice_str = operando_str.substr(inicio + 1, fin - inicio - 1);
-  
   try {
     return std::stoi(indice_str);
   } catch (...) {
@@ -188,17 +179,7 @@ void Parser::ValidarOperando(Token token, const std::string& operando_str, int n
     throw std::runtime_error("Error línea " + std::to_string(numero_linea) + 
                             ": Instrucción requiere operando");
   }
-  
   std::string tipo = IdentificarTipoOperando(operando_str);
-  
-  // LOAD: Rechaza inmediatos
-  if (token == Token::LOAD) {
-    if (tipo == "inmediato") {
-      throw std::runtime_error("Error línea " + std::to_string(numero_linea) + 
-                              ": LOAD no puede usar operandos inmediatos (=valor)");
-    }
-  }
-  
   // STORE: Rechaza inmediatos y R0
   if (token == Token::STORE) {
     if (tipo == "inmediato") {
@@ -213,7 +194,6 @@ void Parser::ValidarOperando(Token token, const std::string& operando_str, int n
       }
     }
   }
-  
   // READ: Rechaza inmediatos y R0
   if (token == Token::READ) {
     if (tipo == "inmediato") {
@@ -228,7 +208,6 @@ void Parser::ValidarOperando(Token token, const std::string& operando_str, int n
       }
     }
   }
-  
   // WRITE: Rechaza R0
   if (token == Token::WRITE) {
     if (tipo == "directo") {
@@ -239,7 +218,6 @@ void Parser::ValidarOperando(Token token, const std::string& operando_str, int n
       }
     }
   }
-  
   // HALT: No acepta operandos
   if (token == Token::HALT) {
     if (!operando_str.empty()) {
