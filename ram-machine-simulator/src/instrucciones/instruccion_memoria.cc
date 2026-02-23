@@ -14,7 +14,7 @@
   * @version 1.0
   */
 
-#include "instruccion_memoria.h"
+#include "instrucciones/instruccion_memoria.h"
 
 /**
  * @brief 

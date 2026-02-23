@@ -14,7 +14,7 @@
   * @version 1.0
   */
 
-#include "instruccion_alu.h"
+#include "instrucciones/instruccion_alu.h"
 
 /**
  * @brief 

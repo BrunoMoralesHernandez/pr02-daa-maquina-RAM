@@ -14,7 +14,8 @@
   * @version 1.0
   */
 
-#include "instruccion_control.h"
+#include "instrucciones/instruccion_control.h"
+
 
 /**
  * @brief 

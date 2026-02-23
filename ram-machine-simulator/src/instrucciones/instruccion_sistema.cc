@@ -14,7 +14,7 @@
   * @version 1.0
   */
 
-#include "instruccion_sistema.h"
+#include "instrucciones/instruccion_sistema.h"
 
 /**
  * @brief 
