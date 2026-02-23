@@ -30,13 +30,7 @@ class MaquinaRAM {
   void Run ();
   // Getters
   MemoriaDatos& datos() { return datos_; }
-  MemoriaPrograma& instrucciones() { return instrucciones_; }
-  InputUnit& getCintaEntrada() { return entrada_; }
-  OutputUnit& getCintaSalida() { return salida_; }
-  size_t pc() const { return pc_; }
   // Metodos auxiliares
-  void IncrementarPC() { ++pc_; };
-  void halt() { halt_flag_ = true; };
   void MostrarEstado() const;
  private:
   size_t pc_{};
