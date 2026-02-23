@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include "maquina-ram.h"
+#include "parser.h"
 
 /**
  * @brief 
@@ -27,8 +28,12 @@
  */
 MaquinaRAM::MaquinaRAM(const std::string& fichero_programa, const std::string& fichero_entrada,
   const std::string& fichero_salida) : pc_{0}, halt_flag_{false}, entrada_{fichero_entrada}, salida_ {fichero_salida} {
-    // Faltaria el parser que cargara el programa en memoria
-    // Ahora tendriamos las cintas cargadas, y la memoria de datos a 0 inicializada el ACC
+  Parser parser;
+  instrucciones_ = parser.ParsearPrograma(fichero_programa);
+  // Verificar que el programa no esté vacío
+  if (instrucciones_.Tamano() == 0) {
+    throw std::runtime_error("Error: Programa vacío");
+  }
 }
 
 /**
@@ -71,18 +76,6 @@ void MaquinaRAM::Run() {
   std::cout << "Total de instrucciones ejecutadas: " << instrucciones_ejecutadas << std::endl;
   // Guardar salida
   salida_.CerrarCinta();
-}
-
-/**
- * @brief 
- * 
- * @param nueva_linea 
- */
-void MaquinaRAM::setPC(const int nueva_linea) {
-  if (nueva_linea < 0 || nueva_linea >= static_cast<int>(instrucciones_.Tamano())) {
-    throw std::runtime_error("PC fuera de rango: " + std::to_string(nueva_linea));
-  }
-  pc_ = nueva_linea;
 }
 
 /**
