@@ -1,0 +1,150 @@
+# @brief Bubble Sort - Ordenamiento por burbuja 
+# Compara elementos adyacentes repetidamente e intercambia los que están
+# desordenados, haciendo "flotar" elementos mayores al final. 
+# Complejidad: O(n²) peor y caso promedio, O(n) mejor caso
+# Espacio: O(1)
+
+# Pseudocódigo:
+#   for i = 1 to n-1 do
+#     for j = n downto i + 1 do
+#       if A[j-1] > A[j] then begin
+#         temp = A[j-1]
+#         A[j-1] = A[j]
+#         A[j] = temp
+#       end
+#     end
+#   end
+#
+# Entrada: n (tamaño), seguido de n elementos
+# Salida: Array ordenado
+# Registros:
+#   R1 = n (tamaño del array)
+#   R2 = i (índice externo del for)
+#   R3 = j (índice interno del for)
+#   R4 = A[j-1]
+#   R5 = A[j]
+#   R6 = temp
+#   R7 = A (array con direccionamiento indexado)
+
+# Lee el tamaño del array
+READ 1
+
+# Cargar n en R1
+LOAD 1
+STORE 1
+
+# Lee los n elementos en el array R7[0..n-1]
+LOAD =0
+STORE 2          # contador i = 0
+
+lee_array_bs:
+  LOAD 2
+  LOAD 1
+  SUB 1
+  JGTZ fin_lee_array_bs
+  
+  READ 4         # Lee elemento en R4
+  LOAD 4
+  STORE 7[2]     # A[i] = R4
+  LOAD 2
+  ADD =1
+  STORE 2        # i++
+  JUMP lee_array_bs
+
+fin_lee_array_bs:
+
+# Bubble Sort
+# i = 1
+LOAD =1
+STORE 2
+
+for_i:           # for i = 1 to n-1
+  LOAD 2
+  LOAD 1
+  SUB 1
+  JGTZ fin_for_i
+  
+  # j = n
+  LOAD 1
+  STORE 3        # j = n
+  
+  for_j:         # for j = n downto i + 1
+    LOAD 3
+    LOAD 2
+    ADD =1
+    SUB 3
+    JGTZ fin_for_j
+    
+    # if A[j-1] > A[j]
+    LOAD 3
+    SUB =1
+    STORE 6      # R6 = j - 1
+    
+    LOAD 7[6]    # R0 = A[j-1]
+    STORE 4      # temp_A_j_minus_1 = A[j-1]
+    
+    LOAD 7[3]    # R0 = A[j]
+    STORE 5      # temp_A_j = A[j]
+    
+    LOAD 4       # R0 = A[j-1]
+    LOAD 5       # R0 = R0 - A[j] = A[j-1] - A[j]
+    SUB 5
+    JZERO no_swap # si A[j-1] <= A[j], no hacer swap
+    
+    # Intercambiar: temp = A[j-1]
+    LOAD 4       # R0 = A[j-1] (ya guardado)
+    STORE 6      # R6 = A[j-1]
+    
+    # A[j-1] = A[j]
+    LOAD 5       # R0 = A[j]
+    LOAD 3
+    SUB =1
+    STORE 6      # R6 = j - 1
+    STORE 7[6]   # A[j-1] = A[j]
+    
+    # A[j] = temp
+    LOAD 6       # R0 = temp (A[j-1] original)
+    STORE 7[3]   # A[j] = temp
+    
+    no_swap:
+    
+    # j--
+    LOAD 3
+    SUB =1
+    STORE 3
+    
+    JUMP for_j
+  
+  fin_for_j:
+  
+  # i++
+  LOAD 2
+  ADD =1
+  STORE 2
+  
+  JUMP for_i
+
+fin_for_i:
+
+# Escribe el array ordenado
+LOAD =0
+STORE 2          # contador i = 0
+
+escribe_array_bs:
+  LOAD 2
+  LOAD 1
+  SUB 1
+  JGTZ fin_escribe_bs
+  
+  LOAD 7[2]      # R0 = A[i]
+  WRITE 7[2]     # Escribe A[i]
+  
+  LOAD 2
+  ADD =1
+  STORE 2        # i++
+  
+  JUMP escribe_array_bs
+
+fin_escribe_bs:
+
+HALT
