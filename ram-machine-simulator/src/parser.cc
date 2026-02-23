@@ -108,7 +108,6 @@ std::vector<std::string> Parser::LimpiarTodasLineas(const std::vector<std::strin
     if (limpia != "") lineas_limpias.push_back(limpia);
   }
   return lineas_limpias;
-  
 }
 
 /**
@@ -137,6 +136,10 @@ std::string Parser::IdentificarTipoOperando(const std::string& operando_str) {
     return "indirecto";
   }
   if (operando_str.find('[') != std::string::npos) {
+    size_t posicion_index = operando_str.find('[');
+    if (operando_str[posicion_index + 1] == '*') {
+      return "indexado_dinamico";
+    }
     return "indexado";
   }
   return "directo";
@@ -167,6 +170,9 @@ int Parser::ExtraerIndice(const std::string& operando_str) {
     throw std::runtime_error("Error: Formato indexado inválido '" + operando_str + "'");
   }
   std::string indice_str = operando_str.substr(inicio + 1, fin - inicio - 1);
+  if (!indice_str.empty() && indice_str[0] == '*') {
+    indice_str = indice_str.substr(1);
+  }
   try {
     return std::stoi(indice_str);
   } catch (...) {
@@ -229,29 +235,29 @@ void Parser::ValidarOperando(Token token, const std::string& operando_str, int n
 
 std::unique_ptr<Operador> Parser::CrearOperando(const std::string& operando_str, int numero_linea) {
   std::string tipo = IdentificarTipoOperando(operando_str);
-  
   try {
     if (tipo == "inmediato") {
       int valor = std::stoi(operando_str.substr(1));
       return std::make_unique<OperandoInmediato>(valor);
     }
-    
     if (tipo == "directo") {
       int registro = ExtraerRegistro(operando_str);
       return std::make_unique<OperandoDirecto>(registro);
     }
-    
     if (tipo == "indirecto") {
       int registro = ExtraerRegistro(operando_str);
       return std::make_unique<OperandoIndirecto>(registro);
     }
-    
     if (tipo == "indexado") {
       int registro = ExtraerRegistro(operando_str);
       int indice = ExtraerIndice(operando_str);
       return std::make_unique<OperandoIndexado>(registro, indice);
     }
-    
+    if (tipo == "indexado_dinamico") {
+      int registro = ExtraerRegistro(operando_str);
+      int indice = ExtraerIndice(operando_str);
+      return std::make_unique<OperandoIndexado>(registro, indice, true);
+    }
     if (tipo == "vacio") {
       return nullptr;
     }
@@ -259,7 +265,6 @@ std::unique_ptr<Operador> Parser::CrearOperando(const std::string& operando_str,
     throw std::runtime_error("Error línea " + std::to_string(numero_linea) + 
                             ": " + std::string(e.what()));
   }
-  
   throw std::runtime_error("Error línea " + std::to_string(numero_linea) + 
                           ": Tipo de operando desconocido '" + operando_str + "'");
 }
@@ -364,25 +369,18 @@ std::unique_ptr<Instruccion> Parser::CrearInstruccion(Token token,
 std::unique_ptr<Instruccion> Parser::ParsearLinea(const std::string& linea, int numero_linea) {
   std::istringstream iss(linea);
   std::string token_str, operando_str;
-  
   iss >> token_str >> operando_str;
-  
   // Convertir a mayúsculas
   std::transform(token_str.begin(), token_str.end(), token_str.begin(), ::toupper);
-  
   // Identificar token
   Token token = IdentificarToken(token_str);
-  
   try {
     // Validar operando según token
     ValidarOperando(token, operando_str, numero_linea);
-    
     // Crear operando
     auto operando = CrearOperando(operando_str, numero_linea);
-    
     // Crear y retornar instrucción
     return CrearInstruccion(token, std::move(operando), numero_linea);
-    
   } catch (const std::exception& e) {
     throw std::runtime_error(std::string(e.what()));
   }
