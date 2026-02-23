@@ -24,7 +24,7 @@
 class InstruccionJUMP : public Instruccion {
   public:
   InstruccionJUMP(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
-  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
  private:
   std::unique_ptr<Operador> operando_;
 };
@@ -32,7 +32,7 @@ class InstruccionJUMP : public Instruccion {
 class InstruccionJZERO : public Instruccion {
   public:
   InstruccionJZERO(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
-  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
  private:
   std::unique_ptr<Operador> operando_;
 };
@@ -40,7 +40,7 @@ class InstruccionJZERO : public Instruccion {
 class InstruccionJGTZ : public Instruccion {
   public:
   InstruccionJGTZ(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
-  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
  private:
   std::unique_ptr<Operador> operando_;
 };

@@ -50,7 +50,8 @@ OpcinesPrograma ParseArgs(const int argc, char* argv[]) {
       std::cerr << "Error: argumento invalido" << std::endl;
     }
   }
-  if (opciones.cinta_entrada == opciones.cinta_salida) {
+  // Solo validar archivos si no se solicita ayuda
+  if (!opciones.mostrar_ayuda && opciones.cinta_entrada == opciones.cinta_salida) {
     throw std::runtime_error("Error fatal: El archivo de entrada y salida no pueden ser el mismo.");
   }
   return opciones;

@@ -25,9 +25,9 @@
  * @param salida 
  * @param pc 
  */
-void InstruccionJUMP::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionJUMP::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int salto_pc = operando_->GetValor(datos);
-  pc = salto_pc;
+  pc = static_cast<size_t>(salto_pc);
 }
 
 /**
@@ -38,11 +38,11 @@ void InstruccionJUMP::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUni
  * @param salida 
  * @param pc 
  */
-void InstruccionJZERO::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionJZERO::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
-  if (valor_R0  == 0) {
+  if (valor_R0 == 0) {
     int salto_pc = operando_->GetValor(datos);
-    pc = salto_pc;
+    pc = static_cast<size_t>(salto_pc);
   } else {
     ++pc;
   }
@@ -56,11 +56,11 @@ void InstruccionJZERO::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUn
  * @param salida 
  * @param pc 
  */
-void InstruccionJGTZ::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionJGTZ::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
-  if (valor_R0  > 0) {
+  if (valor_R0 > 0) {
     int salto_pc = operando_->GetValor(datos);
-    pc = salto_pc;
+    pc = static_cast<size_t>(salto_pc);
   } else {
     ++pc;
   }

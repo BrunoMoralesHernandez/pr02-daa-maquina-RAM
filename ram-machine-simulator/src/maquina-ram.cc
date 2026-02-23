@@ -50,8 +50,8 @@ MaquinaRAM::MaquinaRAM(const std::string& fichero_programa, const std::string& f
  * - Llamar a halt() si es HALT
  */
 void MaquinaRAM::Run() {  
-  int instrucciones_ejecutadas = 0;
-  while (!halt_flag_ && pc_ < static_cast<int>(instrucciones_.Tamano())) {
+  size_t instrucciones_ejecutadas = 0;
+  while (!halt_flag_ && pc_ < instrucciones_.Tamano()) {
     try {
       // Obtener instrucción actual
       Instruccion* instruccion = instrucciones_.ObtenerInstruccion(pc_);
@@ -59,7 +59,6 @@ void MaquinaRAM::Run() {
         throw std::runtime_error("Instrucción nula en PC=" + std::to_string(pc_));
       }
       // Ejecutar instrucción
-      // La instrucción recibe referencias y puede modificar estado
       instruccion->execute(datos_, entrada_, salida_, pc_, halt_flag_);
       instrucciones_ejecutadas++;
     } catch (const std::runtime_error& e) {
@@ -70,7 +69,7 @@ void MaquinaRAM::Run() {
   // Finalización
   if (halt_flag_) {
     std::cout << "Programa terminado con HALT" << std::endl;
-  } else if (pc_ >= static_cast<int>(instrucciones_.Tamano())) {
+  } else if (pc_ >= instrucciones_.Tamano()) {
     std::cout << "Programa terminado (fin de instrucciones)" << std::endl;
   }
   std::cout << "Total de instrucciones ejecutadas: " << instrucciones_ejecutadas << std::endl;

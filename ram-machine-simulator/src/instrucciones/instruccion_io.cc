@@ -24,7 +24,7 @@
  * @param salida 
  * @param pc 
  */
-void InstruccionREAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionREAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_cinta = entrada.LeerValor();
   operando_->SetValor(datos, valor_cinta);
   ++pc;
@@ -38,7 +38,7 @@ void InstruccionREAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUni
  * @param salida 
  * @param pc 
  */
-void InstruccionWRITE::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionWRITE::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_escribir = operando_->GetValor(datos);
   salida.EscribirValor(valor_escribir);
   ++pc;

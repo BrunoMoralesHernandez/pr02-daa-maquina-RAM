@@ -33,13 +33,13 @@ class MaquinaRAM {
   MemoriaPrograma& instrucciones() { return instrucciones_; }
   InputUnit& getCintaEntrada() { return entrada_; }
   OutputUnit& getCintaSalida() { return salida_; }
-  int pc() const { return pc_; }
+  size_t pc() const { return pc_; }
   // Metodos auxiliares
   void IncrementarPC() { ++pc_; };
   void halt() { halt_flag_ = true; };
   void MostrarEstado() const;
  private:
-  int pc_{};
+  size_t pc_{};
   bool halt_flag_{false};
   MemoriaDatos datos_{};
   MemoriaPrograma instrucciones_{};

@@ -24,7 +24,7 @@
  * @param salida 
  * @param pc 
  */
-void InstruccionADD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionADD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
   int resultado = valor_R0 + operando_->GetValor(datos);
   datos.Store(resultado, 0);
@@ -39,7 +39,7 @@ void InstruccionADD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
  * @param salida 
  * @param pc 
  */
-void InstruccionSUB::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionSUB::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
   int resultado = valor_R0 - operando_->GetValor(datos);
   datos.Store(resultado, 0);
@@ -54,7 +54,7 @@ void InstruccionSUB::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
  * @param salida 
  * @param pc 
  */
-void InstruccionMUL::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionMUL::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
   int resultado = valor_R0 * operando_->GetValor(datos);
   datos.Store(resultado, 0);
@@ -69,7 +69,7 @@ void InstruccionMUL::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
  * @param salida 
  * @param pc 
  */
-void InstruccionDIV::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionDIV::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
   int valor_operando = operando_->GetValor(datos);
   if (valor_operando == 0) {

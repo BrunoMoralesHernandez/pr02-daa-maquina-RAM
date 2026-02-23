@@ -23,17 +23,11 @@
  * @return int 
  */
 int OperandoIndirecto::GetValor (const MemoriaDatos& datos) {
-  int registro = datos.Load(registro_id_);
-  if (registro < 0) {
-    throw std::runtime_error("Error: Indice de registro indirecto invalido, valor negativo");
-  }
+  size_t registro = static_cast<size_t>(datos.Load(registro_id_));
   return datos.Load(registro);
 }
 
 void OperandoIndirecto::SetValor(MemoriaDatos& datos, int valor) {
-  int registro = datos.Load(registro_id_);
-  if (registro < 0) {
-    throw std::runtime_error("Error: Indice de registro indirecto invalido, valor negativo");
-  }
+  size_t registro = static_cast<size_t>(datos.Load(registro_id_));
   datos.Store(valor, registro);
 }

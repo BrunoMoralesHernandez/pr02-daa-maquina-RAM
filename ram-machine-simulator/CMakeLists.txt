@@ -42,7 +42,7 @@ add_executable(ram_sim ${SOURCES})
 if(MSVC)
     target_compile_options(ram_sim PRIVATE /W4 /O2)
 else()
-    target_compile_options(ram_sim PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-parameter -O3)
+    target_compile_options(ram_sim PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-parameter -O3 -Wconversion -Wsign-conversion -Wshadow -Wcast-align -Wunused -Woverloaded-virtual -Werror)
 endif()
 
 # Flags adicionales para debugging

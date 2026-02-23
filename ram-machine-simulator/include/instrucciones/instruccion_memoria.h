@@ -24,7 +24,7 @@
 class InstruccionLOAD : public Instruccion {
  public:
   InstruccionLOAD(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
-  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
  private:
   std::unique_ptr<Operador> operando_;
 };
@@ -32,7 +32,7 @@ class InstruccionLOAD : public Instruccion {
 class InstruccionSTORE : public Instruccion {
  public:   
   InstruccionSTORE(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
-  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
  private:
   std::unique_ptr<Operador> operando_;
 };

@@ -24,6 +24,6 @@
  * @param salida 
  * @param pc 
  */
-void InstruccionHALT::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionHALT::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   halt_flag = true;
 }

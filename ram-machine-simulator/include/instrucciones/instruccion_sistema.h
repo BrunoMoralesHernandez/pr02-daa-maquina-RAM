@@ -23,7 +23,7 @@
 
 class InstruccionHALT : public Instruccion {
  public:
-  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
 };
 
 #endif

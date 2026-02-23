@@ -24,7 +24,7 @@
  * @param salida 
  * @param pc 
  */
-void InstruccionLOAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionLOAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor = operando_->GetValor(datos);
   datos.Store(valor, 0);
   ++pc;
@@ -38,7 +38,7 @@ void InstruccionLOAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUni
  * @param salida 
  * @param pc 
  */
-void InstruccionSTORE::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) {
+void InstruccionSTORE::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
   int valor_R0 = datos.Load(0);
   operando_->SetValor(datos, valor_R0);
   ++pc;

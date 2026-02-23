@@ -21,11 +21,11 @@
 
 class OperandoIndirecto : public Operador {
  public:
-  OperandoIndirecto(const int registro) : registro_id_(registro) {}
+  OperandoIndirecto(const size_t registro) : registro_id_(registro) {}
   int GetValor(const MemoriaDatos& datos) override;
   void SetValor(MemoriaDatos& datos, int valor) override;
  private:
-  int registro_id_;
+  size_t registro_id_;
 };
 
 # endif
