@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de JUMP, JZERO y JGTZ.
+  * @date Feb 21 2026
   * @version 1.0
   */
 
@@ -18,7 +18,7 @@
 
 
 /**
- * @brief 
+ * @brief Salta incondicionalmente a la dirección del operando. 
  * 
  * @param datos 
  * @param entrada 
@@ -31,7 +31,7 @@ void InstruccionJUMP::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUni
 }
 
 /**
- * @brief 
+ * @brief Salta si R0 == 0, si no avanza al siguiente.
  * 
  * @param datos 
  * @param entrada 
@@ -49,7 +49,7 @@ void InstruccionJZERO::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUn
 }
 
 /**
- * @brief 
+ * @brief Salta si R0 > 0, si no avanza al siguiente.
  * 
  * @param datos 
  * @param entrada 

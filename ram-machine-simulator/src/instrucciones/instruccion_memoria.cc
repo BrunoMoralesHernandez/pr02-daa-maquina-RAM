@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de LOAD y STORE.
+  * @date Feb 20 2026
   * @version 1.0
   */
 
 #include "instrucciones/instruccion_memoria.h"
 
 /**
- * @brief 
+ * @brief R0 = valor del operando.
  * 
  * @param datos 
  * @param entrada 
@@ -31,7 +31,7 @@ void InstruccionLOAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUni
 }
 
 /**
- * @brief 
+ * @brief destino = R0.
  * 
  * @param datos 
  * @param entrada 

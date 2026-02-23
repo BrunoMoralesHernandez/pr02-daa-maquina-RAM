@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de instrucciones ALU: ADD, SUB, MUL, DIV.
+  * @date Feb 21 2026
   * @version 1.0
   */
 
 #include "instrucciones/instruccion_alu.h"
 
 /**
- * @brief 
+ * @brief R0 = R0 + operando. 
  * 
  * @param datos 
  * @param entrada 
@@ -32,7 +32,7 @@ void InstruccionADD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
 }
 
 /**
- * @brief 
+ * @brief R0 = R0 - operando.
  * 
  * @param datos 
  * @param entrada 
@@ -47,7 +47,7 @@ void InstruccionSUB::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
 }
 
 /**
- * @brief 
+ * @brief R0 = R0 * operando.
  * 
  * @param datos 
  * @param entrada 
@@ -62,7 +62,7 @@ void InstruccionMUL::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
 }
 
 /**
- * @brief 
+ * @brief R0 = R0 / operando.
  * 
  * @param datos 
  * @param entrada 

@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de MemoriaDatos: registros con soporte vectorial.
+  * @date Feb 2026
   * @version 1.0
   */
 
 #include "memoria_datos.h"
 
 /**
- * @brief Construct a new Memoria Datos:: Memoria Datos object
+ * @brief Inicializa R0 (acumulador) a 0.
  * 
  */
 MemoriaDatos::MemoriaDatos() {
@@ -26,7 +26,7 @@ MemoriaDatos::MemoriaDatos() {
 }
 
 /**
- * @brief 
+ * @brief Devuelve datos_[registro][indice]. 
  * 
  * @param registro 
  * @param indice 
@@ -43,7 +43,7 @@ int MemoriaDatos::Load(const size_t registro, const size_t indice) const {
 }
 
 /**
- * @brief 
+ * @brief Almacena valor en datos_[registro][indice], expandiendo si es necesario.
  * 
  * @param valor 
  * @param registro 
@@ -66,7 +66,7 @@ void MemoriaDatos::Store(const int valor, const size_t registro, const size_t in
 }
 
 /**
- * @brief 
+ * @brief Imprime todos los registros con su contenido.
  * 
  */
 void MemoriaDatos::MostrarMemoria() const {

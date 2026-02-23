@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de OperandoDirecto.
+  * @date Feb 2026
   * @version 1.0
   */
 
 #include "operandodirecto.h"
 
 /**
- * @brief 
+ * @brief Devuelve datos_[indice_registro][0].
  * 
  * @param datos 
  * @return int 
@@ -27,7 +27,7 @@ int OperandoDirecto::GetValor (const MemoriaDatos& datos) {
 }
 
 /**
- * @brief 
+ * @brief Almacena valor en datos_[indice_registro][0]. 
  * 
  * @param datos 
  * @param valor 

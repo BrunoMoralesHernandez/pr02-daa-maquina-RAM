@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Instrucciones de memoria: LOAD (→R0) y STORE (R0→destino).
+  * @date Feb 21 2026
   * @version 1.0
   */
 

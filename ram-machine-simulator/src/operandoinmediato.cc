@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de OperandoInmediato.
+  * @date Feb 2026
   * @version 1.0
   */
 
 #include "operandoinmediato.h"
 
 /**
- * @brief 
+ * @brief Devuelve la constante almacenada en valor_. Ignora datos. 
  * 
  * @param datos 
  * @return int 
@@ -26,6 +26,12 @@ int OperandoInmediato::GetValor(const MemoriaDatos& datos) {
   return valor_;
 }
 
+/**
+ * @brief No permitido: lanza excepción. No se puede escribir en un inmediato.
+ * 
+ * @param datos 
+ * @param valor 
+ */
 void OperandoInmediato::SetValor(MemoriaDatos& datos, int valor) {
   throw std::runtime_error("Error: No se puede escribir en operando inmediato (=valor)");
 }

@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de READ y WRITE.
+  * @date Feb 21 2026
   * @version 1.0
   */
 
 #include "instrucciones/instruccion_io.h"
 
 /**
- * @brief 
+ * @brief Lee el siguiente valor de la cinta de entrada y lo almacena en el operando.
  * 
  * @param datos 
  * @param entrada 
@@ -31,7 +31,7 @@ void InstruccionREAD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUni
 }
 
 /**
- * @brief 
+ * @brief Escribe el valor del operando en la cinta de salida. 
  * 
  * @param datos 
  * @param entrada 

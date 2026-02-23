@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de HALT.
+  * @date Feb 21 2026
   * @version 1.0
   */
 
 #include "instrucciones/instruccion_sistema.h"
 
 /**
- * @brief 
+ * @brief Activa halt_flag para detener el ciclo de ejecución.
  * 
  * @param datos 
  * @param entrada 

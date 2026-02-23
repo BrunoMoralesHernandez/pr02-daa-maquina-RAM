@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de OperandoIndirecto.
+  * @date Feb 2026 
   * @version 1.0
   */
 
 #include "operandoindirecto.h"
 
 /**
- * @brief 
+ *  @brief Devuelve R[R[registro_id]]: doble indirección.
  * 
  * @param datos 
  * @return int 
@@ -27,6 +27,12 @@ int OperandoIndirecto::GetValor (const MemoriaDatos& datos) {
   return datos.Load(registro);
 }
 
+/**
+ * @brief Almacena valor en R[R[registro_id]].
+ * 
+ * @param datos 
+ * @param valor 
+ */
 void OperandoIndirecto::SetValor(MemoriaDatos& datos, int valor) {
   size_t registro = static_cast<size_t>(datos.Load(registro_id_));
   datos.Store(valor, registro);

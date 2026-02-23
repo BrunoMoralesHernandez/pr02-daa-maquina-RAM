@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de InputUnit: carga de archivo y lectura secuencial.
+  * @date 2026 Feb 2026
   * @version 1.0
   */
 
@@ -19,9 +19,9 @@
 #include "input_unit.h"
 
 /**
- * @brief Construct a new Input Unit:: Input Unit object
- * 
- * @param nombre_archivo 
+ * @brief Abre el archivo, lee todos los enteros y los carga en la cinta.
+ * @param nombre_archivo Ruta al archivo de entrada.
+ * @throws std::runtime_error Si el archivo no existe o está vacío.
  */
 InputUnit::InputUnit(const std::string& nombre_archivo) {
   std::ifstream archivo_entrada(nombre_archivo);

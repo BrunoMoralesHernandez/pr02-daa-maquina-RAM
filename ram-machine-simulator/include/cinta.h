@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Contenedor genérico de datos para las cintas de entrada y salida.
+  * @date Feb 20 2026
   * @version 1.0
   */
 

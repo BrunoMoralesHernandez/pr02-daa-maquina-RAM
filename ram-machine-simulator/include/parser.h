@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief Parser para cargar programas RAM
-  * @date 2025
+  * @brief Parser de programas RAM: traduce archivo .ram a MemoriaPrograma ejecutable.
+  * @date Feb 22 2026
   * @version 1.0
   */
 

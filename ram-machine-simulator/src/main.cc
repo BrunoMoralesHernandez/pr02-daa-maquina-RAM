@@ -10,7 +10,7 @@
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
   * @brief Main - Punto de entrada del simulador RAM
-  * @date 2025
+  * @date Feb 23 2026
   * @version 1.0
   */
 
@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
     MaquinaRAM maquina(opciones.programa_ram, 
                        opciones.cinta_entrada, 
                        opciones.cinta_salida);
+    std::cout << "\nINICIO DE PROGRAMA" << std::endl;
     std::cout << "\nMemoria de Datos:" << std::endl;
     maquina.datos().MostrarMemoria();
     std::cout << "\nEstado de la Máquina:" << std::endl;
@@ -40,7 +41,8 @@ int main(int argc, char* argv[]) {
     // Ejecutamos la maquina
     std::cout << std::endl;
     maquina.Run();
-    std::cout << "Ejecucion terminada" << std::endl;
+    std::cout << "FIN DE PROGRAMA\n\n";
+    std::cout << "ESTADO FINAL DE LA MAQUINA";
     std::cout << "\nMemoria de Datos:" << std::endl;
     maquina.datos().MostrarMemoria();
     std::cout << "\nEstado de la Máquina:" << std::endl;

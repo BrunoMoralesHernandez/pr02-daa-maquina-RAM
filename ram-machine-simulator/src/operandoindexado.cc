@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de OperandoIndexado (estático y dinámico).
+  * @date Feb 2026
   * @version 1.0
   */
 
 #include "operandoindexado.h"
 
 /**
- * @brief 
+ * @brief Devuelve R[registro_id][j], donde j es offset_ o R[offset_] si dinámico.
  * 
  * @param datos 
  * @return int 
@@ -28,7 +28,7 @@ int OperandoIndexado::GetValor(const MemoriaDatos& datos) {
 }
 
 /**
- * @brief 
+ * @brief Almacena valor en R[registro_id][j] con índice estático o dinámico.
  * 
  */
 void OperandoIndexado::SetValor(MemoriaDatos& datos, int valor) {

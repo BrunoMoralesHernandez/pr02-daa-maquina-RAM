@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Operando indirecto (*Ri): usa el valor de Ri como dirección.
+  * @date Feb 2026
   * @version 1.0
   */
 

@@ -9,15 +9,15 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de MemoriaPrograma: inserción y acceso a instrucciones.
+  * @date Feb 2026
   * @version 1.0
   */
 
 #include "memoria_programa.h"
 
 /**
- * @brief 
+ * @brief Mueve la instrucción al vector interno.
  * 
  * @param instruccion 
  */
@@ -26,7 +26,7 @@ void MemoriaPrograma::AgregarInstruccion(std::unique_ptr<Instruccion> instruccio
 }
 
 /**
- * @brief 
+ * @brief Devuelve puntero raw a la instrucción en pc.
  * 
  * @param pc 
  * @return Instruccion* 
@@ -39,7 +39,7 @@ Instruccion* MemoriaPrograma::ObtenerInstruccion(size_t pc) const {
 }
 
 /**
- * @brief 
+ * @brief Imprime los índices de las instrucciones cargadas.
  * 
  */
 void MemoriaPrograma::MostrarMemoria() const {

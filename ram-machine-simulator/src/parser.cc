@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief Implementación del Parser
-  * @date 2025
+  * @brief Implementación del Parser: tokenización, etiquetas e instanciación de instrucciones.
+  * @date Feb 22 2026
   * @version 1.0
   */
 
@@ -29,6 +29,12 @@
 #include "operandoindirecto.h"
 #include "operandoindexado.h"
 
+/**
+ * @brief Punto de entrada: orquesta las 5 fases de parseo y devuelve MemoriaPrograma.
+ * 
+ * @param fichero 
+ * @return MemoriaPrograma 
+ */
 MemoriaPrograma Parser::ParsearPrograma(const std::string& fichero) {
   // 1. Dividir líneas
   auto lineas = DividirLineas(fichero);
@@ -54,7 +60,7 @@ MemoriaPrograma Parser::ParsearPrograma(const std::string& fichero) {
 }
 
 /**
- * @brief 
+ * @brief Lee el archivo línea a línea y devuelve el vector sin procesar.
  * 
  * @param nombre_fichero 
  * @return std::vector<std::string> 
@@ -73,7 +79,7 @@ std::vector<std::string> Parser::DividirLineas(const std::string& nombre_fichero
 }
 
 /**
- * @brief 
+ * @brief Elimina comentarios (#) y espacios en los extremos de una línea.
  * 
  * @param linea 
  * @return std::string 
@@ -91,7 +97,7 @@ std::string Parser::LimpiarLinea(const std::string& linea) {
 }
 
 /**
- * @brief 
+ * @brief Limpia todas las líneas; en iteración 1 elimina también las etiquetas.
  * 
  * @param lineas 
  * @return std::vector<std::string> 
@@ -111,7 +117,7 @@ std::vector<std::string> Parser::LimpiarTodasLineas(const std::vector<std::strin
 }
 
 /**
- * @brief 
+ * @brief Registra en etiquetas_ el nombre y el índice de cada etiqueta encontrada. 
  * 
  * @return oid 
  */
@@ -124,7 +130,54 @@ void Parser::MapearEtiquetas(const std::vector<std::string>& programa) {
   }
 }
 
+/**
+ * @brief Sustituye nombres de etiqueta en operandos por su índice =N.
+ * 
+ * @param lineas 
+ * @return std::vector<std::string> 
+ */
+std::vector<std::string> Parser::ReemplazarEtiquetas(const std::vector<std::string>& lineas) {
+  std::vector<std::string> lineas_reemplazadas;
+  for (const auto& linea : lineas) {
+    std::istringstream iss(linea);
+    std::string token, operando;
+    iss >> token >> operando;
+    // Si el operando no es un número y no es un operando especial (=, *, [)
+    // entonces intenta reemplazarlo por una etiqueta
+    if (!operando.empty() && 
+        operando[0] != '=' && 
+        operando[0] != '*' && 
+        operando.find('[') == std::string::npos) {
+      // Verificar si es un número
+      bool es_numero = true;
+      for (char c : operando) {
+        if (!std::isdigit(c)) {
+          es_numero = false;
+          break;
+        }
+      }
+      // Si no es número, buscar en etiquetas
+      if (!es_numero && etiquetas_.find(operando) != etiquetas_.end()) {
+        int indice_linea = etiquetas_[operando];
+        operando = "=" + std::to_string(indice_linea);
+      }
+    }
+    // Reconstruir línea con operando reemplazado
+    std::string linea_reemplazada = token;
+    if (!operando.empty()) {
+      linea_reemplazada += " " + operando;
+    }
+    lineas_reemplazadas.push_back(linea_reemplazada);
+  }
+  return lineas_reemplazadas;
+}
 
+/**
+ * @brief Infiere el tipo de operando (inmediato, directo, indirecto, indexado, dinámico).
+ * 
+ * @param operando_str 
+ * @return std::string 
+ */
 std::string Parser::IdentificarTipoOperando(const std::string& operando_str) {
   if (operando_str.empty()) {
     return "vacio";
@@ -145,6 +198,12 @@ std::string Parser::IdentificarTipoOperando(const std::string& operando_str) {
   return "directo";
 }
 
+/**
+ * @brief Extrae el número de registro del string de operando.
+ * 
+ * @param operando_str 
+ * @return int 
+ */
 int Parser::ExtraerRegistro(const std::string& operando_str) {
   std::string temp = operando_str;
   // Eliminar prefijos
@@ -163,6 +222,12 @@ int Parser::ExtraerRegistro(const std::string& operando_str) {
   }
 }
 
+/**
+ * @brief Extrae el índice entre corchetes del string de operando indexado.
+ * 
+ * @param operando_str 
+ * @return int 
+ */
 int Parser::ExtraerIndice(const std::string& operando_str) {
   size_t inicio = operando_str.find('[');
   size_t fin = operando_str.find(']');
@@ -180,6 +245,13 @@ int Parser::ExtraerIndice(const std::string& operando_str) {
   }
 }
 
+/**
+ * @brief Valida que el operando sea compatible con la instrucción; lanza si no.
+ * 
+ * @param token 
+ * @param operando_str 
+ * @param numero_linea 
+ */
 void Parser::ValidarOperando(Token token, const std::string& operando_str, int numero_linea) {
   if (operando_str.empty() && token != Token::HALT) {
     throw std::runtime_error("Error línea " + std::to_string(numero_linea) + 
@@ -233,6 +305,13 @@ void Parser::ValidarOperando(Token token, const std::string& operando_str, int n
   }
 }
 
+/**
+ * @brief Instancia y devuelve el operando adecuado según su tipo.
+ * 
+ * @param operando_str 
+ * @param numero_linea 
+ * @return std::unique_ptr<Operador> 
+ */
 std::unique_ptr<Operador> Parser::CrearOperando(const std::string& operando_str, int numero_linea) {
   std::string tipo = IdentificarTipoOperando(operando_str);
   try {
@@ -269,50 +348,14 @@ std::unique_ptr<Operador> Parser::CrearOperando(const std::string& operando_str,
                           ": Tipo de operando desconocido '" + operando_str + "'");
 }
 
-std::vector<std::string> Parser::ReemplazarEtiquetas(const std::vector<std::string>& lineas) {
-  std::vector<std::string> lineas_reemplazadas;
-  
-  for (const auto& linea : lineas) {
-    std::istringstream iss(linea);
-    std::string token, operando;
-    
-    iss >> token >> operando;
-    
-    // Si el operando no es un número y no es un operando especial (=, *, [)
-    // entonces intenta reemplazarlo por una etiqueta
-    if (!operando.empty() && 
-        operando[0] != '=' && 
-        operando[0] != '*' && 
-        operando.find('[') == std::string::npos) {
-      
-      // Verificar si es un número
-      bool es_numero = true;
-      for (char c : operando) {
-        if (!std::isdigit(c)) {
-          es_numero = false;
-          break;
-        }
-      }
-      
-      // Si no es número, buscar en etiquetas
-      if (!es_numero && etiquetas_.find(operando) != etiquetas_.end()) {
-        int indice_linea = etiquetas_[operando];
-        operando = "=" + std::to_string(indice_linea);
-      }
-    }
-    
-    // Reconstruir línea con operando reemplazado
-    std::string linea_reemplazada = token;
-    if (!operando.empty()) {
-      linea_reemplazada += " " + operando;
-    }
-    
-    lineas_reemplazadas.push_back(linea_reemplazada);
-  }
-  
-  return lineas_reemplazadas;
-}
-
+/**
+ * @brief Instancia y devuelve la instrucción correspondiente al token.
+ * 
+ * @param token 
+ * @param operando 
+ * @param numero_linea 
+ * @return std::unique_ptr<Instruccion> 
+ */
 std::unique_ptr<Instruccion> Parser::CrearInstruccion(Token token, 
                                                       std::unique_ptr<Operador> operando,
                                                       int numero_linea) {
@@ -361,11 +404,17 @@ std::unique_ptr<Instruccion> Parser::CrearInstruccion(Token token,
   } catch (const std::exception& e) {
     throw std::runtime_error(std::string(e.what()));
   }
-  
   throw std::runtime_error("Error línea " + std::to_string(numero_linea) + 
                           ": Error al crear instrucción");
 }
 
+/**
+ * @brief Parsea una línea y devuelve la instrucción correspondiente.
+ * 
+ * @param linea 
+ * @param numero_linea 
+ * @return std::unique_ptr<Instruccion> 
+ */
 std::unique_ptr<Instruccion> Parser::ParsearLinea(const std::string& linea, int numero_linea) {
   std::istringstream iss(linea);
   std::string token_str, operando_str;
@@ -386,6 +435,12 @@ std::unique_ptr<Instruccion> Parser::ParsearLinea(const std::string& linea, int 
   }
 }
 
+/**
+ * @brief Convierte el string mnemónico a su Token enum.
+ * 
+ * @param token_str 
+ * @return Token 
+ */
 Token Parser::IdentificarToken(const std::string& token_str) {
   if (token_str == "ADD") return Token::ADD;
   if (token_str == "SUB") return Token::SUB;

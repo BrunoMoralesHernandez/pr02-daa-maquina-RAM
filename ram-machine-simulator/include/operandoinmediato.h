@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Operando inmediato (=valor): devuelve la constante directamente.
+  * @date Feb 2026
   * @version 1.0
   */
 

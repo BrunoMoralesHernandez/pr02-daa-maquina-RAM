@@ -9,8 +9,8 @@
   *
   * @author Alberto Del Castillo Díaz alu0101627137@ull.edu.es
   * @author Bruno Morales Hernandez alu0101664309@ull.edu.es
-  * @brief 
-  * @date 
+  * @brief Implementación de MaquinaRAM: construcción y ciclo de ejecución.
+  * @date Feb 21 2026
   * @version 1.0
   */
 
@@ -20,7 +20,7 @@
 #include "parser.h"
 
 /**
- * @brief 
+ * @brief Parsea el programa y abre las cintas de entrada y salida.
  * 
  * @param fichero_programa 
  * @param fichero_entrada 
@@ -78,7 +78,7 @@ void MaquinaRAM::Run() {
 }
 
 /**
- * @brief 
+ * @brief Imprime PC, halt_flag y número de instrucciones.
  * 
  */
 void MaquinaRAM::MostrarEstado() const {
