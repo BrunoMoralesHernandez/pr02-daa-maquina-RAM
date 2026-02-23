@@ -1,0 +1,3 @@
+Falta comentar adecuadamente el codigo
+Comprobar comportaminetos por parametros o arreglar el main que no me funciona bien
+Mejorar la visualizacion del main

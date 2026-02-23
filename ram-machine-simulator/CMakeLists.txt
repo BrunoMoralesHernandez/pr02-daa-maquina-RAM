@@ -18,14 +18,19 @@ set(SOURCES
   src/cinta.cc
   src/input_unit.cc
   src/output_unit.cc
-  src/instruccion.cc
   src/memoria_datos.cc
-  src/memoria_instrucciones.cc
+  src/memoria_programa.cc          
   src/operandodirecto.cc
   src/operandoindirecto.cc
   src/operandoindexado.cc
   src/operandoinmediato.cc
-  src/operador.cc
+  src/parser.cc               
+  src/maquina-ram.cc
+  src/instrucciones/instruccion_alu.cc
+  src/instrucciones/instruccion_memoria.cc
+  src/instrucciones/instruccion_io.cc
+  src/instrucciones/instruccion_control.cc
+  src/instrucciones/instruccion_sistema.cc
 )
 
 # Crear ejecutable
@@ -35,7 +40,7 @@ add_executable(ram_sim ${SOURCES})
 if(MSVC)
     target_compile_options(ram_sim PRIVATE /W4 /O2)
 else()
-    target_compile_options(ram_sim PRIVATE -Wall -Wextra -Wpedantic -O3)
+    target_compile_options(ram_sim PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-parameter -O3)
 endif()
 
 # Flags adicionales para debugging

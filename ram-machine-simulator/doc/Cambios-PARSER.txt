@@ -1,0 +1,328 @@
+TODO EL TEXTO ESTA GENERADO CON IA SI NO ENTIENDES ALGO ESCRIBEME 
+
+================================================================================
+                          EXPLICACIÓN DEL PARSER
+                    Simulador de Máquina RAM - Práctica 2
+================================================================================
+
+1. INTRODUCCIÓN
+================================================================================
+
+El Parser es el componente responsable de cargar y traducir archivos de 
+programas RAM (.ram) en instrucciones ejecutables. Convierte código fuente
+en estructuras de datos que la MaquinaRAM puede ejecutar.
+
+Flujo general:
+  Archivo .ram → Parser → MemoriaPrograma (instrucciones cargadas)
+
+
+2. ESTRUCTURA DEL PARSER
+================================================================================
+
+Clase: Parser (include/parser.h, src/parser.cc)
+
+Métodos públicos:
+  - MemoriaPrograma ParsearPrograma(const std::string& fichero)
+    └─ Punto de entrada. Orquesta todo el proceso de carga.
+
+Métodos privados (auxiliares):
+  - DividirLineas()              → Lee archivo línea por línea
+  - LimpiarLinea()               → Elimina comentarios y espacios
+  - LimpiarTodasLineas()         → Limpia todas las líneas
+  - MapearEtiquetas()            → Mapea etiquetas → índices de línea
+  - ReemplazarEtiquetas()        → Reemplaza nombres por =índices
+  - ParsearLinea()               → Parsea una instrucción
+  - IdentificarToken()           → string → enum Token
+  - ValidarOperando()            → Valida operando según instrucción
+  - CrearOperando()              → Crea operando (4 tipos)
+  - CrearInstruccion()           → Crea instrucción (12 tipos)
+  - IdentificarTipoOperando()    → Identifica tipo de operando
+  - ExtraerRegistro()            → Extrae número de registro
+  - ExtraerIndice()              → Extrae índice de operando indexado
+
+
+3. FLUJO COMPLETO DE PARSEO
+================================================================================
+
+ParsearPrograma(fichero.ram)
+│
+├─ 1. DividirLineas(fichero)
+│  └─ Lee archivo y retorna vector de líneas sin procesar
+│
+├─ 2. LimpiarTodasLineas(lineas, iteración=0)
+│  ├─ Elimina comentarios (#)
+│  ├─ Trim espacios (\t, espacios)
+│  └─ Retorna vector de líneas limpias
+│
+├─ 3. MapearEtiquetas(lineas_limpias_v0)
+│  ├─ Busca ':' en cada línea
+│  ├─ Extrae nombre de etiqueta
+│  ├─ Guarda: nombre_etiqueta → índice_línea
+│  └─ Almacena en: etiquetas_
+│
+├─ 4. LimpiarTodasLineas(lineas, iteración=1)
+│  ├─ Repite limpieza anterior
+│  └─ Elimina etiquetas de las líneas (lee: ADD =5 → ADD =5)
+│
+├─ 5. ReemplazarEtiquetas(lineas_limpias_v1)
+│  ├─ Para cada operando que NO sea número:
+│  │  ├─ Busca en mapa etiquetas_
+│  │  └─ Reemplaza: JUMP inicio → JUMP =3
+│  └─ Retorna líneas con etiquetas convertidas a =índices
+│
+└─ 6. Para cada línea reemplazada:
+   ├─ ParsearLinea(linea, numero_linea)
+   │  ├─ Separa: mnemónica y operando
+   │  ├─ Convierte mnemónica a mayúsculas
+   │  ├─ IdentificarToken(mnemónica) → enum Token
+   │  ├─ ValidarOperando(token, operando, línea)
+   │  ├─ CrearOperando(operando, línea)
+   │  │  ├─ IdentificarTipoOperando()
+   │  │  ├─ ExtraerRegistro() / ExtraerIndice()
+   │  │  └─ Retorna: unique_ptr<Operador>
+   │  └─ CrearInstruccion(token, operando, línea)
+   │     └─ Switch sobre Token → Retorna: unique_ptr<Instruccion>
+   │
+   └─ programa.AgregarInstruccion(instruccion)
+
+Retorna: MemoriaPrograma (lista de instrucciones ejecutables)
+
+
+4. ENUM TOKEN
+================================================================================
+
+Token identifica qué instrucción es (patrón Strategy):
+
+  enum class Token {
+    ADD, SUB, MUL, DIV,           // ALU
+    LOAD, STORE,                  // Memoria
+    READ, WRITE,                  // I/O
+    JUMP, JZERO, JGTZ,            // Control
+    HALT,                         // Sistema
+    DESCONOCIDA                   // Fallback
+  };
+
+Ventajas:
+  ✓ Type-safe (no strings)
+  ✓ Switch en lugar de if-else
+  ✓ Mejor performance
+  ✓ Fácil de mantener
+
+
+5. TIPOS DE OPERANDOS
+================================================================================
+
+El Parser soporta 4 tipos de operandos:
+
+1. INMEDIATO (=valor)
+   └─ Ejemplo: =5
+   └─ Clase: OperandoInmediato
+   └─ GetValor() retorna el valor directamente (5)
+
+2. DIRECTO (registro)
+   └─ Ejemplo: 1 (significa R1)
+   └─ Clase: OperandoDirecto
+   └─ GetValor() retorna contenido de R1
+
+3. INDIRECTO (*registro)
+   └─ Ejemplo: *2 (significa usar valor de R2 como dirección)
+   └─ Clase: OperandoIndirecto
+   └─ GetValor() retorna R[R2]
+
+4. INDEXADO (registro[índice])
+   └─ Ejemplo: 5[2] (significa R5[2])
+   └─ Clase: OperandoIndexado
+   └─ GetValor() retorna R5[2]
+
+
+6. VALIDACIONES EN TIEMPO DE PARSEO
+================================================================================
+
+Se validan instrucciones según sus restricciones:
+
+  STORE:
+    └─ No puede usar R0 (acumulador es de solo lectura para STORE)
+
+  READ:
+    └─ No puede usar R0 (no se puede leer directamente en acumulador)
+
+  WRITE:
+    └─ No puede usar R0 (pero puede leer del acumulador)
+
+  HALT:
+    └─ No acepta operandos
+
+Si se detecta una violación, se lanza std::runtime_error con descripción
+y número de línea.
+
+
+7. MAPEO DE ETIQUETAS
+================================================================================
+
+Proceso de 2 pasadas:
+
+PASADA 1: Mapear etiquetas
+  ├─ Línea 0: "lee: READ 1"      → etiquetas["lee"] = 0
+  ├─ Línea 1: "LOAD 1"
+  ├─ Línea 2: "JZERO fin"
+  └─ Línea 3: "fin: HALT"        → etiquetas["fin"] = 3
+
+PASADA 2: Reemplazar en instrucciones
+  ├─ "JZERO fin"  → "JZERO =3"   (busca en mapa)
+  └─ "JUMP lee"   → "JUMP =0"
+
+Ventaja: Evita usar strings en tiempo de ejecución
+         Todo es inmediato (=índice)
+
+
+8. EJEMPLO DE PARSEO
+================================================================================
+
+Entrada (archivo .ram):
+  ┌────────────────────────┐
+  │ # Programa simple      │
+  │ inicio: READ 1         │
+  │         LOAD 1         │
+  │         JZERO fin      │
+  │         WRITE 1        │
+  │ fin: HALT              │
+  └────────────────────────┘
+
+Paso 1 - DividirLineas():
+  ["# Programa simple", "inicio: READ 1", "LOAD 1", "JZERO fin", "WRITE 1", "fin: HALT"]
+
+Paso 2 - LimpiarTodasLineas(0):
+  ["inicio: READ 1", "LOAD 1", "JZERO fin", "WRITE 1", "fin: HALT"]
+
+Paso 3 - MapearEtiquetas():
+  etiquetas_ = {"inicio" → 0, "fin" → 4}
+
+Paso 4 - LimpiarTodasLineas(1):
+  ["READ 1", "LOAD 1", "JZERO fin", "WRITE 1", "HALT"]
+
+Paso 5 - ReemplazarEtiquetas():
+  ["READ 1", "LOAD 1", "JZERO =4", "WRITE 1", "HALT"]
+
+Paso 6 - ParsearLinea() para cada línea:
+  ├─ "READ 1"      → InstruccionREAD(OperandoDirecto(1))
+  ├─ "LOAD 1"      → InstruccionLOAD(OperandoDirecto(1))
+  ├─ "JZERO =4"    → InstruccionJZERO(OperandoInmediato(4))
+  ├─ "WRITE 1"     → InstruccionWRITE(OperandoDirecto(1))
+  └─ "HALT"        → InstruccionHALT()
+
+Resultado: MemoriaPrograma con 5 instrucciones listas para ejecutar
+
+
+9. MANEJO DE ERRORES
+================================================================================
+
+El Parser lanza excepciones descriptivas:
+
+  std::runtime_error con formato:
+  "Error línea X: descripción del problema"
+
+Ejemplos:
+  ✓ "Error línea 3: Registro inválido en operando 'abc'"
+  ✓ "Error línea 5: STORE no puede usar R0"
+  ✓ "Error línea 7: HALT no acepta operandos"
+  ✓ "Error: No se pudo abrir el fichero"
+
+El main captura estas excepciones y muestra al usuario:
+  ❌ Error: Error línea 3: Registro inválido...
+
+
+10. PATRÓN STRATEGY APLICADO
+================================================================================
+
+El Parser usa Strategy con Token enum:
+
+Sin Strategy (if-else):
+  if (mnemonica == "ADD")
+    return make_unique<InstruccionADD>(...);
+  else if (mnemonica == "SUB")
+    return make_unique<InstruccionSUB>(...);
+  ... 20+ ifs
+
+Con Strategy (switch):
+  Token token = IdentificarToken(mnemonica);
+  switch (token) {
+    case Token::ADD:
+      return make_unique<InstruccionADD>(...);
+    case Token::SUB:
+      return make_unique<InstruccionSUB>(...);
+    ...
+  }
+
+Beneficios:
+  ✓ Más limpio y legible
+  ✓ Type-safe
+  ✓ Mejor performance (O(1) vs O(n))
+  ✓ Fácil agregar nuevas instrucciones
+
+
+11. COMPLEJIDAD Y RENDIMIENTO
+================================================================================
+
+Complejidad temporal:
+  DividirLineas()        → O(n)        [n = caracteres en archivo]
+  LimpiarTodasLineas()   → O(n)        [procesa cada línea]
+  MapearEtiquetas()      → O(n)        [itera líneas]
+  ReemplazarEtiquetas()  → O(n × m)    [n=líneas, m=etiquetas]
+  ParsearLinea()         → O(1)        [trabajo constante por línea]
+
+Total: O(n) donde n = tamaño del archivo
+
+Complejidad espacial:
+  O(n) para almacenar líneas
+  O(m) para mapa de etiquetas (m = número de etiquetas)
+
+Optimizaciones realizadas:
+  ✓ Evitar copias innecesarias (usar referencias)
+  ✓ unique_ptr para gestión automática de memoria
+  ✓ unordered_map para búsqueda rápida de etiquetas (O(1))
+
+
+12. LIMITACIONES CONOCIDAS
+================================================================================
+
+1. Etiquetas en la misma línea que instrucción:
+   ✓ "inicio: READ 1"    → Funciona
+   ✓ "inicio:READ 1"     → Funciona (sin espacio)
+
+2. Comentarios inline:
+   ✓ "READ 1 # leer"     → Funciona
+   ✗ "READ # comentario" → Elimina el comentario, pero "1" se pierde
+
+3. Operandos inválidos:
+   ✗ "LOAD abc"          → Error (no es número ni etiqueta)
+   ✗ "ADD xyz[2]"        → Error (registro inválido)
+
+4. Etiquetas no definidas:
+   ✗ "JUMP no_existe"    → Error (etiqueta no encontrada)
+
+5. Caracteres especiales:
+   ✗ "LOAD Ñ"            → Error (no se procesan caracteres acentuados)
+
+
+
+
+13. TESTING
+================================================================================
+
+El Parser ha sido probado con:
+
+✓ test1.ram  - Lee entrada hasta 0, copia a salida
+✓ test2.ram  - Reconoce lenguaje (mismo número de 1's y 2's)
+✓ test7.ram  - Lee valores, multiplica por 3, escribe
+
+Casos de prueba recomendados:
+  □ Programa vacío (sin instrucciones)
+  □ Líneas con solo comentarios
+  □ Operandos con espacios adicionales
+  □ Etiquetas con caracteres especiales
+  □ Programas muy largos (>1000 líneas)
+
+
+================================================================================
+                            FIN DEL DOCUMENTO
+================================================================================
