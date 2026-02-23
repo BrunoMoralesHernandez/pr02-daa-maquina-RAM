@@ -22,6 +22,7 @@
 #include "instruccion.h"
 
 class InstruccionJUMP : public Instruccion {
+  public:
   InstruccionJUMP(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
   void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
  private:
@@ -29,6 +30,7 @@ class InstruccionJUMP : public Instruccion {
 };
 
 class InstruccionJZERO : public Instruccion {
+  public:
   InstruccionJZERO(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
   void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
  private:
@@ -36,6 +38,7 @@ class InstruccionJZERO : public Instruccion {
 };
 
 class InstruccionJGTZ : public Instruccion {
+  public:
   InstruccionJGTZ(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
   void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
  private:

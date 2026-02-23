@@ -22,6 +22,7 @@
 #include "instruccion.h"
 
 class InstruccionHALT : public Instruccion {
+ public:
   void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, int& pc, bool& halt_flag) override;
 };
 
