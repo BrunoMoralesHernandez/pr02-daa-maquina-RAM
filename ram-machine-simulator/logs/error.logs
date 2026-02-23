@@ -1,0 +1,6 @@
+read 1,
+load 1,
+jzero =5,
+write 1,
+jump =0,
+halt,
