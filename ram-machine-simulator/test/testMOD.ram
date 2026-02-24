@@ -6,6 +6,7 @@ lee:	read 1
 			load 1
 			jzero fin
       mod =2
+      store 1
 			write 1
 			jump lee
 fin:	halt

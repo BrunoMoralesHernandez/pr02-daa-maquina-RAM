@@ -373,6 +373,9 @@ std::unique_ptr<Instruccion> Parser::CrearInstruccion(Token token,
       case Token::DIV:
         return std::make_unique<InstruccionDIV>(std::move(operando));
       
+      case Token::MOD:
+        return std::make_unique<InstruccionMOD>(std::move(operando));
+
       case Token::LOAD:
         return std::make_unique<InstruccionLOAD>(std::move(operando));
       
@@ -446,6 +449,7 @@ Token Parser::IdentificarToken(const std::string& token_str) {
   if (token_str == "SUB") return Token::SUB;
   if (token_str == "MUL") return Token::MUL;
   if (token_str == "DIV") return Token::DIV;
+  if (token_str == "MOD") return Token::MOD;
   if (token_str == "LOAD") return Token::LOAD;
   if (token_str == "STORE") return Token::STORE;
   if (token_str == "READ") return Token::READ;

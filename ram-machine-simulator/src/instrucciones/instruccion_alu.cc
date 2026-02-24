@@ -81,7 +81,7 @@ void InstruccionDIV::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
 }
 
 /**
- * @brief 
+ * @brief R0 = R0 % operando
  * 
  * @param datos 
  * @param entrada 

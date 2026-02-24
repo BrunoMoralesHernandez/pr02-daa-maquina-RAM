@@ -25,7 +25,7 @@
 #include "memoria_programa.h"
 
 enum class Token {
-  ADD, SUB, MUL, DIV,
+  ADD, SUB, MUL, DIV, MOD,
   LOAD, STORE,
   READ, WRITE,
   JUMP, JZERO, JGTZ,

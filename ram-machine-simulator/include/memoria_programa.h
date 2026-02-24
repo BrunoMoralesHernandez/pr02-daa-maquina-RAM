@@ -33,7 +33,6 @@ class MemoriaPrograma {
  public:
   MemoriaPrograma() = default;
   ~MemoriaPrograma() = default;
-  // AGREGAR ESTO:
   MemoriaPrograma(const MemoriaPrograma&) = delete;
   MemoriaPrograma& operator=(const MemoriaPrograma&) = delete;
   MemoriaPrograma(MemoriaPrograma&&) = default;
