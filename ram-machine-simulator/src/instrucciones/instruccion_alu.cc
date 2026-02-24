@@ -79,3 +79,22 @@ void InstruccionDIV::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit
   datos.Store(resultado, 0);
   ++pc;
 }
+
+/**
+ * @brief 
+ * 
+ * @param datos 
+ * @param entrada 
+ * @param salida 
+ * @param pc 
+ */
+void InstruccionMOD::execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) {
+  int valor_R0 = datos.Load(0);
+  int valor_operando = operando_->GetValor(datos);
+  if (valor_operando == 0) {
+    throw std::runtime_error("Error: Modulo por cero");
+  }
+  int resultado = valor_R0 % valor_operando;
+  datos.Store(resultado, 0);
+  ++pc;
+}

@@ -53,4 +53,12 @@ class InstruccionDIV : public Instruccion {
   std::unique_ptr<Operador> operando_;
 };
 
+class InstruccionMOD : public Instruccion {
+ public:
+  InstruccionMOD(std::unique_ptr<Operador> operando) : operando_{std::move(operando)} {} 
+  void execute(MemoriaDatos& datos, InputUnit& entrada, OutputUnit& salida, size_t& pc, bool& halt_flag) override;
+ private:
+  std::unique_ptr<Operador> operando_;
+};
+
 #endif
